@@ -1,4 +1,4 @@
-
+library(stringr)
 library(biomaRt)
 #for humans
 #listDatasets(ensembl)
@@ -12,20 +12,20 @@ filterTranscriptID<-function(transcript_ids,assembly){
                                    "chromosome_name", "start_position", "end_position",
                                    "strand"),
 
-                    filters = c("go"), #listFilters(ensembl)
+                    filters = c("ensembl_transcript_id"), #listFilters(ensembl)
                     values = goID,
                     mart=ensembl,
                     verbose = TRUE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
-      if(data$strand=="1"){
-        hit<-data$strand=="1"
-        data$strand[hit]<-"+"
-      }
-      if(data$strand=="-1"){
-        hit<-data$strand=="-1"
-        data$strand[hit]<-"-"
-      }
+      data <- data[c(3,4,5,6,1,2)]
+
+      hit<-str_detect(data$strand,"-1")
+      data$strand[hit]<-"-"
+
+      hit<-str_detect(data$strand,"1")
+      data$strand[hit]<-"+"
+
       return(data)
     }
 
@@ -44,20 +44,21 @@ filterGeneName<-function(genes,assembly){
                                    "chromosome_name", "start_position", "end_position",
                                    "strand"),
 
-                    filters = c("ensembl_transcript_id"), #listFilters(ensembl)
+                    filters = c("ensembl_gene_id"), #listFilters(ensembl)
                     values = gene_ids$ensembl_gene_id,
                     mart=ensembl,
                     verbose = TRUE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
-      if(data$strand=="1"){
-        hit<-data$strand=="1"
-        data$strand[hit]<-"+"
-      }
-      if(data$strand=="-1"){
-        hit<-data$strand=="-1"
-        data$strand[hit]<-"-"
-      }
+      data <- data[c(3,4,5,6,1,2)]
+
+      hit<-str_detect(data$strand,"-1")
+      data$strand[hit]<-"-"
+
+      hit<-str_detect(data$strand,"1")
+      data$strand[hit]<-"+"
+
+
       return(data)
     }
 
@@ -80,14 +81,14 @@ filterGeneID<-function(gene_ids){
                     verbose = TRUE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
-      if(data$strand=="1"){
-        hit<-data$strand=="1"
-        data$strand[hit]<-"+"
-      }
-      if(data$strand=="-1"){
-        hit<-data$strand=="-1"
-        data$strand[hit]<-"-"
-      }
+      data <- data[c(3,4,5,6,1,2)]
+
+      hit<-str_detect(data$strand,"-1")
+      data$strand[hit]<-"-"
+
+      hit<-str_detect(data$strand,"1")
+      data$strand[hit]<-"+"
+
       return(data)
     }
 
