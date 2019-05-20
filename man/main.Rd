@@ -1,13 +1,14 @@
-\name{hello}
-\alias{hello}
+\name{Tool1}
+\alias{Tool1}
 \title{Hello, World!}
 \usage{
-hello()
+a()
+b()
 }
 \description{
 Prints 'Hello, world!'.
 }
 \examples{
-hello()
 a()
+b()
 }
