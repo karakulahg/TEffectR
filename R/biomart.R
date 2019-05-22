@@ -26,6 +26,7 @@ filterTranscriptID<-function(transcript_ids,assembly){
 
         hit<-stringr::str_detect(data$strand,"1")
         data$strand[hit]<-"+"
+
       }
 
       return(data)
@@ -87,12 +88,11 @@ filterGeneName<-function(genes,assembly){
       data <- data[c(3,4,5,6,1,2)]
 
       if(length(data)>0){
+          hit<-stringr::str_detect(data$strand,"-1")
+          data$strand[hit]<-"-"
 
-        hit<-stringr::str_detect(data$strand,"-1")
-        data$strand[hit]<-"-"
-
-        hit<-stringr::str_detect(data$strand,"1")
-        data$strand[hit]<-"+"
+          hit<-stringr::str_detect(data$strand,"1")
+          data$strand[hit]<-"+"
       }
 
 
