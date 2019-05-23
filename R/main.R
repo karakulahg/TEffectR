@@ -37,6 +37,7 @@ a <- function(x,y,z){
 
 }
 
+# the function is called as b is returned overlap positions between genes and repeats
 # data$chr <- gsub("\\d","chr\\d",)
 # g is any subset of genome that is returned from called a function.
 # r is a repat annotaion file
@@ -71,10 +72,12 @@ download <- function(assembly){
   return(dt)
 }
 
-library(seqbias)
-library(Rsamtools)
 #bamfilepath<-"~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam"
-c <- function(bamfilepath,ranges){
-  counts <- count.reads( bamfilepath, ranges, binary = F )
+co<-function(bamfilepath,ranges){
+  # counts <- count.reads( bamfilepath, ranges, binary = F )
+  write.table(ranges, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
+  system(paste("bedtools multicov -bams", bamfilepath, "-bed", "overlapped.bed > counts.txt"))
+  counts<-read.csv("counts.txt",sep = "\t", header = F)
+  colnames(counts)<-c(colnames(as.data.frame(ranges)),"counts")
   return(counts)
 }
