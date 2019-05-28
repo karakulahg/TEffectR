@@ -108,7 +108,7 @@ filterGeneID_V<-function(gene_ids,assembly){
   if(length(gene_ids)!=0){
     ensembl = returnEnsembl(assembly)
     if(!is.null(ensembl) & !is.null(gene_ids)){
-      data <- getBM(attributes = c("ensembl_gene_id","external_gene_name",
+      data <- getBM(attributes = c("ensembl_gene_id_version","external_gene_name",
                                    "chromosome_name", "start_position", "end_position",
                                    "strand"),
 
