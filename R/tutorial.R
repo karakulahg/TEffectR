@@ -1,27 +1,52 @@
-# x<-read.csv("~/Documents/Kaan/gene_count_matrix.csv")  #y==hg19
-# x<-read.csv("~/Documents/Kaan/transcript_count_matrix.csv") #y==hg19
+###################################### <<<< 1 >>>> ###################################
+
+# x<-read.csv("~/Documents/Kaan/gene_count_matrix.csv")  #y==hg38
+# x<-read.csv("~/Documents/Kaan/transcript_count_matrix.csv") #y==hg38
 # x<-scan("~/R_codes/genomeArithmetic/RepeatAnalysis/Data/genes.txt", character())
 
+######################################################################################
+
+###################################### <<<< 2 >>>> ###################################
 
 # library(Tool1)
-# #ensembl_transcript_id,ensembl_gene_name,ensembl_transcript_id_version,ensembl_gene_name_version
+
+## ---> z = ensembl_transcript_id,ensembl_gene_name,ensembl_transcript_id_version,ensembl_gene_name_version
+## ---> y = hg19 (Grch37) , hg38 (Grch38)
 # #for gene annotation
+
+# library(stringr)
+# library(biomaRt)
+
+# names(x)[1] <-"geneID"
 # genes<-a(x = x, y = "hg19", z = "ensembl_gene_name")
-#
-#
+
+########################################################################################
+
+###################################### <<<< 3 >>>> #####################################
 #
 # #for repeat annotation
 # library(googledrive)
 # dt<-download("hg19")
 # repeats<-read.csv(dt$local_path,sep = "\t")
 #
-# w<-b(g = genes, r = repeats, strand = "same", up = 1000)
+#########################################################################################
 
-# e<-co(bamfilepath= "~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam", ranges=w)
+###################################### <<<< 4 >>>> ######################################
+#
+# genes$chr<-paste("chr",genes$chr,sep = "") to edit name of chr with prefix "chr"
+# w<-b(g = genes, r = repeats, strand = "same", up = 1000) for overlapping
+#
+# write.table(w, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
+
+# e<-co(bamfilepath= "~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam", ranges=w) for counting
+
+########################################################################################
 
 
+######################################
 
-# > names(x)[1] <-"geneID"
+# for result matrix
+
 # > df1<-genes[,5:6]
 # > df<-merge(df1,x,by="geneID")
 # > View(df)
