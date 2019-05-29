@@ -46,17 +46,25 @@
 ######################################
 
 # for result matrix
+# library(dplyr)
 
 # > df1<-genes[,5:6]
 # > df<-merge(df1,x,by="geneID")
 # > View(df)
 # > df<-df[-1]
 
-# genes$chr<-paste("chr",genes$chr,sep = "")
+# e<-read.table("counts.txt",header = T,sep = "\t")
+# e<-e[,15:25]
+# e$ID <- seq.int(nrow(e))
+# e <- e %<% select(ID,everything())
+# colnames(e)<-colnames(df)
+# last<-rbind(df,e)
 
-# write.table(df, file="sampleMatrix.bed", quote=F, sep="\t", row.names=F, col.names=T)
 
-# df<-read.table("sampleMatrix.bed",header = T,sep = ",")
+
+# write.table(last, file="sampleMatrix.bed", quote=F, sep="\t", row.names=F, col.names=T)
+
+# df<-read.table("sampleMatrix.bed",header = T,sep = "\t")
 # library(edgeR)
 #
 # # DGEList object
