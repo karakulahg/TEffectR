@@ -7,7 +7,6 @@
 # x<-scan("~/R_codes/genomeArithmetic/RepeatAnalysis/Data/genes.txt", character())
 
 source("R/biomart.R")
-source("R/repeatMasker.R")
 source("R/genomicRanges.R")
 
 a <- function(x,y,z){
@@ -42,7 +41,7 @@ a <- function(x,y,z){
 # g is any subset of genome that is returned from called a function.
 # r is a repat annotaion file
 # strand is same or strandness
-#up is defined upstream.
+# up is defined upstream.
 # library(dplyr)
 # library(GenomicRanges)
 b <- function(g,r,strand,up){
@@ -64,19 +63,21 @@ b <- function(g,r,strand,up){
     return(NULL)}
 }
 
-library(googledrive)
-# dt<-read.csv(dt$local_path,sep = "\t")
-# dt$chr<-gsub("chr","",dt$chr)
-download <- function(assembly){
-  dt<-readRepeatMasker(assembly)
+
+formatting <- function(filepath){
+  dt<-read_rm(filepath)
+  last<-as.data.frame(str_split_fixed(dt$matching_class, "/", 2))
+  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
+  dt$strand<-as.character(dt$strand)
+  dt$strand <- replace(dt$strand, dt$strand=="C", "-")
   return(dt)
 }
 
-#bamfilepath<-"~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam"
-co<-function(bamfilepath,ranges){
+#bamfiles<-"~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam"
+co<-function(bamfiles,ranges){
   # counts <- count.reads( bamfilepath, ranges, binary = F )
   write.table(ranges, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  system(paste("bedtools multicov -bams", bamfilepath, "-bed", "overlapped.bed > counts.txt"))
+  system(paste("bedtools multicov -bams", bamfiles, "-bed", "overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(ranges)),"counts")
   return(counts)
