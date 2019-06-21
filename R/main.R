@@ -44,8 +44,16 @@ a <- function(x,y,z){
 # up is defined upstream.
 # library(dplyr)
 # library(GenomicRanges)
-b <- function(g,r,strand,up){
+b <- function(g,r,strand,up,family,class){
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(up)){
+    if(!is.na(family)){
+      hit<-r$repeat_family==family
+      r<-r[hit,]
+    }
+    if(!is.na(class)){
+      hit<-r$repeat_class==class
+      r<-r[hit,]
+    }
     g<-getUpstream(g,up,FALSE)
     if(strand=="same"){
       g<-makeGRangeObj(g)
@@ -77,7 +85,7 @@ formatting <- function(filepath){
 co<-function(bamfiles,ranges){
   # counts <- count.reads( bamfilepath, ranges, binary = F )
   write.table(ranges, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  system(paste("bedtools multicov -bams", bamfiles, "-bed", "overlapped.bed > counts.txt"))
+  system(paste("bedtools multicov -bams ", bamfiles, " -bed", "overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(ranges)),"counts")
   return(counts)

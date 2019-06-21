@@ -10,13 +10,13 @@
 
 # library(Tool1)
 
-## ---> z = ensembl_transcript_id,ensembl_gene_name,ensembl_transcript_id_version,ensembl_gene_name_version
+## ---> z = ensembl_transcript_id,ensembl_gene_name,ensembl_transcript_id_version,ensembl_gene_id_version
 ## ---> y = hg19 (Grch37) , hg38 (Grch38)
 ## for gene annotation
 # library(stringr)
 # library(biomaRt)
 # names(x)[1] <-"geneID"
-# genes<-a(x = x, y = "hg19", z = "ensembl_gene_name")
+# genes<-a(x = x$geneID, y = "hg38", z = "ensembl_gene_id_version")
 
 ########################################################################################
 
