@@ -4,9 +4,9 @@ library(biomaRt)
 #listDatasets(ensembl)
 
 
-filterTranscriptID<-function(transcript_ids,assembly){
+filterTranscriptID<-function(transcript_ids,assembly,URL){
   if(length(transcript_ids)!=0){
-    ensembl = returnEnsembl(assembly)
+    ensembl = returnEnsembl(assembly,URL)
     if(!is.null(ensembl)){
       data <- getBM(attributes = c("ensembl_gene_id","external_gene_name",
                                    "chromosome_name", "start_position", "end_position",
@@ -27,6 +27,9 @@ filterTranscriptID<-function(transcript_ids,assembly){
         hit<-stringr::str_detect(data$strand,"1")
         data$strand[hit]<-"+"
 
+        hit<-stringr::str_detect(data$chr,"CHR")==FALSE
+        data$chr[hit]<-paste("chr",data$chr[hit],sep = "")
+
       }
 
       return(data)
@@ -37,9 +40,9 @@ filterTranscriptID<-function(transcript_ids,assembly){
 
 }
 
-filterTranscriptID_V<-function(transcript_ids,assembly){
+filterTranscriptID_V<-function(transcript_ids,assembly,URL){
   if(length(transcript_ids)!=0){
-    ensembl = returnEnsembl(assembly)
+    ensembl = returnEnsembl(assembly,URL)
     if(!is.null(ensembl)){
       data <- getBM(attributes = c("ensembl_gene_id","external_gene_name",
                                    "chromosome_name", "start_position", "end_position",
@@ -59,6 +62,9 @@ filterTranscriptID_V<-function(transcript_ids,assembly){
 
         hit<-stringr::str_detect(data$strand,"1")
         data$strand[hit]<-"+"
+
+        hit<-stringr::str_detect(data$chr,"CHR")==FALSE
+        data$chr[hit]<-paste("chr",data$chr[hit],sep = "")
       }
 
       return(data)
@@ -70,9 +76,9 @@ filterTranscriptID_V<-function(transcript_ids,assembly){
 }
 
 
-filterGeneName<-function(genes,assembly){
+filterGeneName<-function(genes,assembly,URL){
   if(length(genes)!=0){
-    ensembl = returnEnsembl(assembly)
+    ensembl = returnEnsembl(assembly,URL)
     gene_ids <- getBM(attributes = c("ensembl_gene_id", "hgnc_symbol"), filters = c("hgnc_symbol"), values = genes, mart = ensembl, verbose = T)
     if(!is.null(ensembl) & !is.null(gene_ids)){
       data <- getBM(attributes = c("ensembl_gene_id","external_gene_name",
@@ -93,6 +99,9 @@ filterGeneName<-function(genes,assembly){
 
           hit<-stringr::str_detect(data$strand,"1")
           data$strand[hit]<-"+"
+
+          hit<-stringr::str_detect(data$chr,"CHR")==FALSE
+          data$chr[hit]<-paste("chr",data$chr[hit],sep = "")
       }
 
 
@@ -104,9 +113,9 @@ filterGeneName<-function(genes,assembly){
 }
 
 
-filterGeneID_V<-function(gene_ids,assembly){
+filterGeneID_V<-function(gene_ids,assembly,URL){
   if(length(gene_ids)!=0){
-    ensembl = returnEnsembl(assembly)
+    ensembl = returnEnsembl(assembly,URL)
     if(!is.null(ensembl) & !is.null(gene_ids)){
       data <- getBM(attributes = c("ensembl_gene_id_version","external_gene_name",
                                    "chromosome_name", "start_position", "end_position",
@@ -126,6 +135,9 @@ filterGeneID_V<-function(gene_ids,assembly){
 
         hit<-stringr::str_detect(data$strand,"1")
         data$strand[hit]<-"+"
+
+        hit<-stringr::str_detect(data$chr,"CHR")==FALSE
+        data$chr[hit]<-paste("chr",data$chr[hit],sep = "")
       }
 
       return(data)
@@ -136,9 +148,9 @@ filterGeneID_V<-function(gene_ids,assembly){
 }
 
 
-filterGeneID<-function(gene_ids,assembly){
+filterGeneID<-function(gene_ids,assembly,URL){
   if(length(gene_ids)!=0){
-    ensembl = returnEnsembl(assembly)
+    ensembl = returnEnsembl(assembly,URL)
     if(!is.null(ensembl) & !is.null(gene_ids)){
       data <- getBM(attributes = c("ensembl_gene_id","external_gene_name",
                                    "chromosome_name", "start_position", "end_position",
@@ -158,6 +170,10 @@ filterGeneID<-function(gene_ids,assembly){
 
         hit<-stringr::str_detect(data$strand,"1")
         data$strand[hit]<-"+"
+
+        hit<-stringr::str_detect(data$chr,"CHR")==FALSE
+        data$chr[hit]<-paste("chr",data$chr[hit],sep = "")
+
       }
 
       return(data)
@@ -170,18 +186,18 @@ filterGeneID<-function(gene_ids,assembly){
 
 
 
-returnEnsembl<-function(assembly){library(biomaRt)
+returnEnsembl<-function(assembly,URL){
   if(assembly=="hg19" || assembly=="Grch37"){
-    ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl", GRCh = 37, verbose = TRUE)
+    ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl", GRCh = 37, host = URL, verbose = TRUE)
     return(ensembl)
   }else if(assembly=="hg38" || assembly=="Grch38"){
-    ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl", GRCh = 38, verbose = TRUE)
+    ensembl = useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl", GRCh = 38, host = URL, verbose = TRUE)
     return(ensembl)
   }else if(y=="mm9" || y =="Grcm37"){
-    ensembl = useEnsembl(biomart="ensembl", dataset="mmusculus_gene_ensembl", verbose = TRUE)
+    ensembl = useEnsembl(biomart="ensembl", dataset="mmusculus_gene_ensembl",  host = URL, verbose = TRUE)
     return(ensembl)
   }else if(y=="mm10" || y =="Grcm38"){
-    ensembl = useEnsembl(biomart="ensembl", dataset="mmusculus_gene_ensembl", verbose = TRUE)
+    ensembl = useEnsembl(biomart="ensembl", dataset="mmusculus_gene_ensembl",  host = URL, verbose = TRUE)
     return(ensembl)
   }else{
     print("not found assembly")

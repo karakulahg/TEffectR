@@ -1,16 +1,16 @@
 ###################################### <<<< 1 >>>> ###################################
 ## To Read gene or transcript expression file
-# x<-read.csv("~/Documents/Kaan/gene_count_matrix.csv")  #y==hg38
-# x<-read.csv("~/Documents/Kaan/transcript_count_matrix.csv") #y==hg38
-# x<-scan("~/R_codes/genomeArithmetic/RepeatAnalysis/Data/genes.txt", character())
+# x<-read.csv("~/data3/TEffectR-Samples/gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
+# x<-x[1:250,]
 
 ######################################################################################
+
 
 ###################################### <<<< 2 >>>> ###################################
 
 # library(Tool1)
 
-## ---> z = ensembl_transcript_id,ensembl_gene_name,ensembl_transcript_id_version,ensembl_gene_id_version
+## --->  = ensembl_transcript_id,ensembl_gene_name,ensembl_transcript_id_version,ensembl_gene_id_version
 ## ---> y = hg19 (Grch37) , hg38 (Grch38)
 ## for gene annotation
 # library(stringr)

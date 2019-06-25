@@ -1,30 +1,24 @@
-# a is a function that to filter biomart and return genome information. This function gets x, y, z parameters
-# x is a vector which can include gene names, gene ids or transcript ids.
-# y is a string information about assembly belong to x
-# z is a string information that is defined ID type ( ensembl_gene_name, gId, tId)
-# x<-read.csv("~/Documents/Kaan/gene_count_matrix.csv")  #y==hg19
-# x<-read.csv("~/Documents/Kaan/transcript_count_matrix.csv") #y==hg19
-# x<-scan("~/R_codes/genomeArithmetic/RepeatAnalysis/Data/genes.txt", character())
 
 source("R/biomart.R")
 source("R/genomicRanges.R")
 
-a <- function(x,y,z){
-  if(length(x)>0 & is.character(z)){
-    if(z=="ensembl_gene_name"){
-      df<-filterGeneName(x,y)
+# the function that to filter biomart and return genome information.
+get_intervals <- function(x, organism, ID.type, URL){
+  if(length(x)>0 & is.character(ID.type)){
+    if(ID.type=="ensembl_gene_name"){
+      df<-filterGeneName(x,organism,URL)
       return(df)
-    }else if(z=="ensembl_transcript_id"){
-      df<-filterTranscriptID(x,y)
+    }else if(ID.type=="ensembl_transcript_id"){
+      df<-filterTranscriptID(x,organism,URL)
       return(df)
-    }else if(z=="ensembl_transcript_id_version"){
-      df<-filterTranscriptID_V(x,y)
+    }else if(ID.type=="ensembl_transcript_id_version"){
+      df<-filterTranscriptID_V(x,organism,URL)
       return(df)
-    }else if(z=="ensembl_gene_id_version"){
-      df<-filterGeneID_V(x,y)
+    }else if(ID.type=="ensembl_gene_id_version"){
+      df<-filterGeneID_V(x,organism,URL)
       return(df)
-    }else if(z=="ensembl_gene_id"){
-      df<-filterGeneID(x,y)
+    }else if(ID.type=="ensembl_gene_id"){
+      df<-filterGeneID(x,organism,URL)
       return(df)
     }else{
       return(NULL)
@@ -37,24 +31,25 @@ a <- function(x,y,z){
 }
 
 # the function is called as b is returned overlap positions between genes and repeats
-# data$chr <- gsub("\\d","chr\\d",)
-# g is any subset of genome that is returned from called a function.
-# r is a repat annotaion file
-# strand is same or strandness
-# up is defined upstream.
-# library(dplyr)
-# library(GenomicRanges)
-b <- function(g,r,strand,up,family,class){
-  if(is.data.frame(g) & is.data.frame(r) & is.numeric(up)){
-    if(!is.na(family)){
-      hit<-r$repeat_family==family
+get_overlaps <- function(g,r,strand,distance,repeat_family=NULL,repeat_class=NULL,repeat_name=NULL){
+  if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
+    if(!is.null(repeat_family)){
+      hit<-r$repeat_family==repeat_family
       r<-r[hit,]
     }
-    if(!is.na(class)){
-      hit<-r$repeat_class==class
+    if(!is.null(repeat_class)){
+      hit<-r$repeat_class==repeat_class
       r<-r[hit,]
     }
-    g<-getUpstream(g,up,FALSE)
+    if(!is.null(repeat_name)){
+      hit<-r$repeat_name==repeat_name
+      r<-r[hit,]
+    }
+    if(distance>0){
+      g<-getUpstream(g,distance,FALSE)
+    }else if(distance<0){
+      g<-getDownstreams(g,distance,FALSE)
+    }
     if(strand=="same"){
       g<-makeGRangeObj(g)
       r<-makeGRangeObj(r)
@@ -72,7 +67,7 @@ b <- function(g,r,strand,up,family,class){
 }
 
 
-formatting <- function(filepath){
+rm_format <- function(filepath){
   dt<-read_rm(filepath)
   last<-as.data.frame(str_split_fixed(dt$matching_class, "/", 2))
   dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
