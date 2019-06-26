@@ -70,17 +70,17 @@ get_overlaps <- function(g,r,strand,distance,repeat_family=NULL,repeat_class=NUL
 rm_format <- function(filepath){
   dt<-read_rm(filepath)
   last<-as.data.frame(str_split_fixed(dt$matching_class, "/", 2))
-  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
+  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat_name"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
   dt$strand<-as.character(dt$strand)
   dt$strand <- replace(dt$strand, dt$strand=="C", "-")
   return(dt)
 }
 
-#bamfiles<-"~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam"
-co<-function(bamfiles,ranges){
-  # counts <- count.reads( bamfilepath, ranges, binary = F )
+
+rm_count<-function(bamfiles,ranges){
+  # counts <- count.reads( bamfiles, ranges, binary = F )
   write.table(ranges, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  system(paste("bedtools multicov -bams ", bamfiles, " -bed", "overlapped.bed > counts.txt"))
+  system(paste("bedtools multicov -s -f 1 -D -bams ", bamfiles, " -bed", "overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(ranges)),"counts")
   return(counts)

@@ -1,4 +1,4 @@
-exportPattern("a")
-exportPattern("b")
-exportPattern("download")
-exportPattern("co")
+exportPattern("get_intervals")
+exportPattern("rm_format")
+exportPattern("get_overlaps")
+exportPattern("rm_count")
