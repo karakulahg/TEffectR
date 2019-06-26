@@ -80,8 +80,13 @@ rm_format <- function(filepath){
 rm_count<-function(bamfiles,ranges){
   # counts <- count.reads( bamfiles, ranges, binary = F )
   write.table(ranges, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  system(paste("bedtools multicov -s -f 1 -D -bams ", bamfiles, " -bed", "overlapped.bed > counts.txt"))
+  system(paste("bedtools multicov -f 1 -D -bams ", bamfiles, " -bed", "overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(ranges)),"counts")
   return(counts)
 }
+
+
+# data <-as.character(lapply(seqlevels(w), function(x){gsub("chr", " ", x)}))
+
+
