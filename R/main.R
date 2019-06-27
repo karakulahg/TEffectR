@@ -77,16 +77,25 @@ rm_format <- function(filepath){
 }
 
 
-rm_count<-function(bamfiles,ranges){
-  # counts <- count.reads( bamfiles, ranges, binary = F )
-  write.table(ranges, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  system(paste("bedtools multicov -f 1 -D -bams ", bamfiles, " -bed", "overlapped.bed > counts.txt"))
+rm_count<-function(bamlist,namelist,ranges){
+  bamfiles<-paste(bamlist, collapse = ' ')
+  bamFile <- BamFile(bamlist[1])
+  if(stringr::str_detect(seqnames(seqinfo(bamFile)),"chr")==FALSE){
+    data <-as.character(lapply(seqlevels(ranges), function(x){gsub("chr", " ", x)}))
+    seqlevels(ranges)<-data
+  }
+  df<-as.data.frame(ranges)
+  df<-df[c(1,13,14,6,4,5,2,3,7,10,11,12)] # to reorder columns for bed file format
+  df<-as.data.frame(apply(df,2,function(x)gsub('\\s+', '',x))) # for removing whitespaces from fields.
+  df$repeat_family <- sub("^$", ".", df$repeat_family)
+  write.table(df, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
+  system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
-  colnames(counts)<-c(colnames(as.data.frame(ranges)),"counts")
+  # system("rm overlapped.bed counts.txt")
+  colnames(counts)<-c(colnames(as.data.frame(df)),namelist)
   return(counts)
 }
 
 
-# data <-as.character(lapply(seqlevels(w), function(x){gsub("chr", " ", x)}))
 
 

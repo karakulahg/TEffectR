@@ -39,6 +39,9 @@
 #
 # write.table(w, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
 #
+
+# library(Rsamtools)
+
 # e<-co(bamfilepath= "~/Documents/Kaan/NG-13693_AD_lib212351_5589_7_sorted.bam", ranges=w) for counting
 
 ########################################################################################
@@ -50,7 +53,9 @@
 # library(dplyr)
 
 # > df1<-genes[,5:6]
-# > df<-merge(df1,x,by="geneID")
+# r<-as.data.frame(rownames(x))
+# colnames(r)<-"geneID"
+# > df<-merge(df1,r,by="geneID")
 # > View(df)
 # > df<-df[-1]
 
