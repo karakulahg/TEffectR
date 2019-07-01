@@ -53,24 +53,28 @@
 # library(dplyr)
 
 # > df1<-genes[,5:6]
-# r<-as.data.frame(rownames(x))
-# colnames(r)<-"geneID"
-# > df<-merge(df1,r,by="geneID")
+# x<-read.csv("~/Downloads/gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
+# y<- data.frame(geneID = row.names(x), x)
+# > df<-merge(df1,y,by="geneID")
 # > View(df)
+# df<-df[1:4]
+
 # > df<-df[-1]
 
+
+
 # e<-read.table("counts.txt",header = T,sep = "\t")
-# e<-e[,15:25]
+# e<-e[,13:14]
 # e$ID <- seq.int(nrow(e))
-# e <- e %<% select(ID,everything())
+# e <- e %>% select(ID,everything())
 # colnames(e)<-colnames(df)
 # last<-rbind(df,e)
 
 
 
-# write.table(last, file="sampleMatrix.bed", quote=F, sep="\t", row.names=F, col.names=T)
+# write.table(last, file="sampleMatrix1.bed", quote=F, sep="\t", row.names=F, col.names=T)
 
-# df<-read.table("sampleMatrix.bed",header = T,sep = "\t")
+# df<-read.table("sampleMatrix1.bed",header = T,sep = "\t")
 # library(edgeR)
 #
 # # DGEList object
@@ -81,6 +85,6 @@
 #
 # normlist<-cbind(norm$genes,norm$counts)
 #
-# write.csv(normlist,"sample-TMM-Counts.csv",row.names = F)
+# write.csv(normlist,"sample-TMM-Counts1.csv",row.names = F)
 
 
