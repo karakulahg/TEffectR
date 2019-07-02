@@ -31,12 +31,11 @@ get_intervals <- function(x, organism, ID.type, URL){
 }
 
 # the function is called as b is returned overlap positions between genes and repeats
-get_overlaps <- function(g,r,strand,distance,repeat_family=NULL){
+get_overlaps <- function(g,r,strand,distance,repeat_class=NULL){
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
-    if(!is.null(repeat_family)){
-      hit<-r$repeat_family==repeat_family
+    if(!is.null(repeat_class)){
+      hit<-r$repeat_class==repeat_class
       r<-r[hit,]
-
     }else{
       print("please choose one of the repeat options")
       return(NULL)
@@ -94,7 +93,7 @@ rm_count<-function(bamlist,namelist,ranges){
 co_summarise <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
-    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class), FUN=sum)
+    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatFamily=counts$repeat_family), FUN=sum)
     return(b)
   }
 
