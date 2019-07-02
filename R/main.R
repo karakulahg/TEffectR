@@ -87,16 +87,14 @@ rm_count<-function(bamlist,namelist,ranges){
   write.table(df, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
   system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
-  # system("rm overlapped.bed counts.txt")
   colnames(counts)<-c(colnames(as.data.frame(df)),namelist)
   return(counts)
 }
 
-co_summarise <-function(counts,sampleName){
+co_summarise <-function(counts,namelist){
   if(!is.null(counts) & !is.null(sampleName)){
-    h<-colnames(counts)==sampleName
-    b<-aggregate(counts[,h], by=list(geneName=counts$geneName, repeatName=counts$repeat_name), FUN=sum)
-    b[!apply(b[,2:3] == 0, 1, FUN = any, na.rm = TRUE),]
+    col_indexes <- which(colnames(counts) %in% namelist)
+    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatName=counts$repeat_name), FUN=sum)
     return(b)
   }
 

@@ -52,8 +52,9 @@ library(Rsamtools)
    namelist<- c("SRR5962198","SRR5962199","SRR5962200","SRR5962201","SRR5962202","SRR5962203","SRR5962204","SRR5962205","SRR5962206","SRR5962207")
 
    e<-rm_count(bamlist = bamlist, namelist, ranges=w) #for counting
-#
-#    summ<-co_summarise(e,"SRR5962198")
+
+   summ<-co_summarise(e,"SRR5962198")
+
 #
 # ########################################################################################
 #
