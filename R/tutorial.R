@@ -53,7 +53,7 @@ library(Rsamtools)
 
    e<-rm_count(bamlist = bamlist, namelist, ranges=w) #for counting
 
-   summ<-co_summarise(e,"SRR5962198")
+   summ<-co_summarise(e, namelist)
 
 #
 # ########################################################################################
