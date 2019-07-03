@@ -98,7 +98,7 @@ library(Rsamtools)
 
    e<-rm_count(bamlist = bamlist, namelist, ranges=w) #for counting
 
-   summ<-co_summarise(e, namelist)
+   summ<-co_summarise(e, namelist) #repeat.counts
 
 
    write.table(e, file="counts.csv", quote=F, sep="\t", row.names=F, col.names=T)
@@ -118,7 +118,7 @@ library(Rsamtools)
 # # y<- data.frame(geneID = row.names(x), x)
 # # df<-merge(df1,y,by="geneID")
 # # View(df)
-# # df<-df[,2:12]
+# # df<-df[,2:12] #gene.counts
 # #
 #
 #
@@ -167,7 +167,7 @@ library(Rsamtools)
    repeat.counts
    sample1<-gene.counts[3,2:11]
    sample1
-   sample2 <- repeat.counts[7,3:12]
+   sample2 <- repeat.counts[7,4:13]
    sample2
    sample3<-c(rep("T",5), rep("N",5))
    df<-data.frame(gene.exp=as.numeric(sample1) , repeat.exp=as.numeric(sample2) , group=as.character(sample3))
@@ -181,7 +181,29 @@ library(Rsamtools)
 
 
 
+   f<-function(x){
+     s1<-x[,2:11]
+     hit<-repeat.counts$geneName==x$geneName
+     s2<-repeat.counts[hit,4:13]
+     s3<-c(rep("T",5), rep("N",5))
+     df<-data.frame(gene.exp=as.numeric(s1) , repeat.exp=as.numeric(s2) , group=as.character(s3))
+   }
 
+  app<-apply(gene.count, 1, FUN=f(x))
+
+
+   sample4<-gene.counts[5,2:11]
+   sample4
+   sample5 <- repeat.counts[9,4:13]
+   sample5
+   sample3<-c(rep("T",5), rep("N",5))
+   df2<-data.frame(gene.exp=as.numeric(sample4) , repeat.exp=as.numeric(sample5) , group=as.character(sample3))
+   rownames(df2)<-colnames(sample5)
+   df2
+
+   list_obj<-list(df,df2)
+
+   bbb<-merge(gene.counts,repeat.counts,by="geneName")
 
 
 
