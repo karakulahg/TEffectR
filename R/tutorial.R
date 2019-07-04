@@ -39,50 +39,6 @@ library(Rsamtools)
 # #
 # #
 
-   # bamlist <- c("~/Documents/G.Karakulah/BC/uniqueBam/SRR5962198/SRR5962198_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962199/SRR5962199_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962200/SRR5962200_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962201/SRR5962201_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962202/SRR5962202_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962203/SRR5962203_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962204/SRR5962204_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962205/SRR5962205_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962206/SRR5962206_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962207/SRR5962207_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962208/SRR5962208_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962209/SRR5962209_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962210/SRR5962210_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962211/SRR5962211_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962212/SRR5962212_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962213/SRR5962213_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962214/SRR5962214_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962215/SRR5962215_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962216/SRR5962216_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962217/SRR5962217_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962218/SRR5962218_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962219/SRR5962219_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962220/SRR5962220_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962221/SRR5962221_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962222/SRR5962222_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962223/SRR5962223_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962224/SRR5962224_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962225/SRR5962225_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962226/SRR5962226_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962227/SRR5962227_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962228/SRR5962228_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962229/SRR5962229_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962230/SRR5962230_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962231/SRR5962231_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962232/SRR5962232_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962233/SRR5962233_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962234/SRR5962234_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962235/SRR5962235_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962236/SRR5962236_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962237/SRR5962237_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962240/SRR5962240_unique_sorted.bam",
-   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962241/SRR5962241_unique_sorted.bam")
-
-
    bamlist <- c("~/Documents/G.Karakulah/BC/uniqueBam/SRR5962198/SRR5962198_unique_sorted.bam",
                 "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962199/SRR5962199_unique_sorted.bam",
                 "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962200/SRR5962200_unique_sorted.bam",
@@ -92,18 +48,80 @@ library(Rsamtools)
                 "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962204/SRR5962204_unique_sorted.bam",
                 "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962205/SRR5962205_unique_sorted.bam",
                 "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962206/SRR5962206_unique_sorted.bam",
-                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962207/SRR5962207_unique_sorted.bam")
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962207/SRR5962207_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962208/SRR5962208_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962209/SRR5962209_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962210/SRR5962210_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962211/SRR5962211_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962212/SRR5962212_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962213/SRR5962213_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962214/SRR5962214_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962215/SRR5962215_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962216/SRR5962216_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962217/SRR5962217_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962218/SRR5962218_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962219/SRR5962219_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962220/SRR5962220_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962221/SRR5962221_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962222/SRR5962222_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962223/SRR5962223_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962224/SRR5962224_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962225/SRR5962225_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962226/SRR5962226_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962227/SRR5962227_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962228/SRR5962228_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962229/SRR5962229_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962230/SRR5962230_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962231/SRR5962231_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962232/SRR5962232_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962233/SRR5962233_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962234/SRR5962234_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962235/SRR5962235_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962236/SRR5962236_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962237/SRR5962237_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962238/SRR5962238_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962239/SRR5962239_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962240/SRR5962240_unique_sorted.bam",
+                "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962241/SRR5962241_unique_sorted.bam")
 
-   namelist<- c("SRR5962198","SRR5962199","SRR5962200","SRR5962201","SRR5962202","SRR5962203","SRR5962204","SRR5962205","SRR5962206","SRR5962207")
+
+   namelist<- c("SRR5962198","SRR5962199","SRR5962200","SRR5962201","SRR5962202","SRR5962203","SRR5962204","SRR5962205","SRR5962206","SRR5962207",
+                "SRR5962208","SRR5962209","SRR5962210","SRR5962211","SRR5962212","SRR5962213","SRR5962214","SRR5962215","SRR5962216","SRR5962217",
+                "SRR5962218","SRR5962219","SRR5962220","SRR5962221","SRR5962222","SRR5962223","SRR5962224","SRR5962225","SRR5962226","SRR5962227",
+                "SRR5962228","SRR5962229","SRR5962230","SRR5962231","SRR5962232","SRR5962233","SRR5962234","SRR5962235","SRR5962236","SRR5962237",
+                "SRR5962238","SRR5962239","SRR5962240","SRR5962241")
+
+
+   # bamlist <- c("~/Documents/G.Karakulah/BC/uniqueBam/SRR5962198/SRR5962198_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962199/SRR5962199_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962200/SRR5962200_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962201/SRR5962201_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962202/SRR5962202_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962203/SRR5962203_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962204/SRR5962204_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962205/SRR5962205_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962206/SRR5962206_unique_sorted.bam",
+   #              "~/Documents/G.Karakulah/BC/uniqueBam/SRR5962207/SRR5962207_unique_sorted.bam")
+   #
+   # namelist<- c("SRR5962198","SRR5962199","SRR5962200","SRR5962201","SRR5962202","SRR5962203","SRR5962204","SRR5962205","SRR5962206","SRR5962207")
+
+   write.table(w, file="overlapped.csv", quote=F, sep="\t", row.names=F, col.names=T)
 
    e<-rm_count(bamlist = bamlist, namelist, ranges=w) #for counting
 
    summ<-co_summarise(e, namelist) #repeat.counts
 
 
-   write.table(e, file="counts.csv", quote=F, sep="\t", row.names=F, col.names=T)
+   write.table(e, file="counts-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 
-   write.table(summ, file="summarized.csv", quote=F, sep="\t", row.names=F, col.names=T)
+   write.table(summ, file="summarized-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
+
+
+   genes.expr<-x
+   repeats.expr<-summ
+
+   write.table(last, file="matrix-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
+
 #
 # ########################################################################################
 #

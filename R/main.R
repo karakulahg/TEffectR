@@ -96,9 +96,31 @@ co_summarise <-function(counts,namelist){
     b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatFamily=counts$repeat_family), FUN=sum)
     return(b)
   }
-
-
-
 }
+
+make_matrix<-function(genes, genes.expr,repeats.expr){
+  df1<-genes[,5:6]
+  y<- data.frame(geneID = row.names(genes.expr), genes.expr)
+  df<-merge(df1,y,by="geneID")
+  df<-df[,2:ncol(df)]
+
+  e1<-repeats.expr[,4:ncol(repeats.expr)]
+  e1$geneName <- seq.int(nrow(e1))
+  e1 <- e1 %>% select(geneName,everything())
+  last<-rbind(df,e1)
+  return(last)
+}
+
+get_pseudo<- function(matrix){
+  b<-DGEList(matrix[,2:ncol(df)])
+  a.norm<-calcNormFactors(b, method = "TMM")
+  d = estimateCommonDisp(a.norm, verbose=TRUE)
+  d$pseudo.counts
+  return(d)
+}
+
+
+
+
 
 
