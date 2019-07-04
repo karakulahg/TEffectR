@@ -111,12 +111,13 @@ make_matrix<-function(genes, genes.expr,repeats.expr){
   return(last)
 }
 
-get_pseudo<- function(matrix){
-  b<-DGEList(matrix[,2:ncol(df)])
-  a.norm<-calcNormFactors(b, method = "TMM")
-  d = estimateCommonDisp(a.norm, verbose=TRUE)
-  d$pseudo.counts
-  return(d)
+get_dge_transformation<- function(count.matrix){
+  dge<-DGEList(count.matrix[,2:ncol(df)])
+  keep <- filterByExpr(dge, min.total.count=10)
+  dge <- dge[keep, keep.lib.sizes=FALSE]
+  dge <- calcNormFactors(dge)
+  v <- voom(dge)
+  return(v)
 }
 
 

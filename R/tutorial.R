@@ -122,6 +122,10 @@ library(Rsamtools)
 
    write.table(last, file="matrix-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 
+   library(edgeR)
+
+
+
 #
 # ########################################################################################
 #
@@ -202,12 +206,24 @@ library(Rsamtools)
    f<-function(x){
      s1<-x[,2:11]
      hit<-repeat.counts$geneName==x$geneName
-     s2<-repeat.counts[hit,4:13]
+     s2<-repeat.counts[hit,]
      s3<-c(rep("T",5), rep("N",5))
-     df<-data.frame(gene.exp=as.numeric(s1) , repeat.exp=as.numeric(s2) , group=as.character(s3))
+
+     for(r in 1:nrow(s2)){
+         if(r==1){
+           df<-data.frame(x$geneName[1]=as.numeric(s1) , s2$repeatFamily[r]=as.numeric(s2[r,4:13]) , group=as.character(s3))
+
+         }else{
+
+           df<-data.frame(x$geneName[1]=as.numeric(s1) , s2$repeatFamily[r]=as.numeric(s2[r,4:13]) , group=as.character(s3))
+
+         }
+      }
+
+     return(ldf)
    }
 
-  app<-apply(gene.count, 1, FUN=f(x))
+  app<-apply(gene.counts, 1, FUN=f(x))
 
 
    sample4<-gene.counts[5,2:11]
