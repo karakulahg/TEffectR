@@ -121,6 +121,29 @@ get_dge_transformation<- function(count.matrix){
 }
 
 
+make_glm<-function(gene.counts,repeat.counts){
+  l<-list()
+  for (r in 1:nrow(gene.counts)) {
+    s1<-gene.counts[r,2:11]
+    hit<-repeat.counts$geneName==gene.counts$geneName[r]
+    s2<-repeat.counts[hit,]
+    s3<-c(rep("T",5), rep("N",5))
+    goalsMenu <- s2$repeatFamily
+    output <- as.data.frame(matrix(rep(0, 2 + length(goalsMenu)), nrow=1))
+    names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily),"group")
+    output[1:length(s1),1]<-as.numeric(s1)
+    for (var in 1:(ncol(output)-2)){
+      output[1:length(s2[var,4:13]),var+1]<- as.numeric(s2[var,4:13])
+    }
+    output[1:length(s3),ncol(output)]<-as.character(s3)
+    if(r>1){
+      l<-list.append(l,output)
+    }else{
+      l<-output
+    }
+  }
+  return(l)
+}
 
 
 

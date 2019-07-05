@@ -14,6 +14,11 @@ library(biomaRt)
 library(biomartr)
 library(dplyr)
 library(Rsamtools)
+library(edgeR)
+library(rlist)
+library(limma)
+
+
 #
 # ## for gene annotation
 #
@@ -122,7 +127,6 @@ library(Rsamtools)
 
    write.table(last, file="matrix-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 
-   library(edgeR)
 
 
 
@@ -175,69 +179,12 @@ library(Rsamtools)
 #
 #
 
-   b<-DGEList(matrix[,2:ncol(df)])
-   a.norm<-calcNormFactors(b, method = "TMM")
-   d = estimateCommonDisp(a.norm, verbose=TRUE)
-   str(d)
-   d$pseudo.counts
-
-
-   #how to glm
-
-   repeat.counts <- read.delim("~/Downloads/summarise.csv")
-   gene.counts <- read.csv("~/Downloads/gene_count_matrix.csv")
-   repeat.counts
-   sample1<-gene.counts[3,2:11]
-   sample1
-   sample2 <- repeat.counts[7,4:13]
-   sample2
-   sample3<-c(rep("T",5), rep("N",5))
-   df<-data.frame(gene.exp=as.numeric(sample1) , repeat.exp=as.numeric(sample2) , group=as.character(sample3))
-   rownames(df)<-colnames(sample2)
-   df
-   glimpse(df)
-
-   formula <- gene.exp~.
-   logit <- glm(formula = formula , data=df, family = 'poisson')
-   summary(logit)
 
 
 
-   f<-function(x){
-     s1<-x[,2:11]
-     hit<-repeat.counts$geneName==x$geneName
-     s2<-repeat.counts[hit,]
-     s3<-c(rep("T",5), rep("N",5))
-
-     for(r in 1:nrow(s2)){
-         if(r==1){
-           df<-data.frame(x$geneName[1]=as.numeric(s1) , s2$repeatFamily[r]=as.numeric(s2[r,4:13]) , group=as.character(s3))
-
-         }else{
-
-           df<-data.frame(x$geneName[1]=as.numeric(s1) , s2$repeatFamily[r]=as.numeric(s2[r,4:13]) , group=as.character(s3))
-
-         }
-      }
-
-     return(ldf)
-   }
-
-  app<-apply(gene.counts, 1, FUN=f(x))
 
 
-   sample4<-gene.counts[5,2:11]
-   sample4
-   sample5 <- repeat.counts[9,4:13]
-   sample5
-   sample3<-c(rep("T",5), rep("N",5))
-   df2<-data.frame(gene.exp=as.numeric(sample4) , repeat.exp=as.numeric(sample5) , group=as.character(sample3))
-   rownames(df2)<-colnames(sample5)
-   df2
 
-   list_obj<-list(df,df2)
-
-   bbb<-merge(gene.counts,repeat.counts,by="geneName")
 
 
 
