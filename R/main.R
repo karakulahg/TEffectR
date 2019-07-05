@@ -112,7 +112,7 @@ make_matrix<-function(genes, genes.expr,repeats.expr){
 }
 
 get_dge_transformation<- function(count.matrix){
-  dge<-DGEList(count.matrix[,2:ncol(df)])
+  dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
   keep <- filterByExpr(dge, min.total.count=10)
   dge <- dge[keep, keep.lib.sizes=FALSE]
   dge <- calcNormFactors(dge)
@@ -124,7 +124,7 @@ get_dge_transformation<- function(count.matrix){
 make_glm<-function(gene.counts,repeat.counts){
   l<-list()
   for (r in 1:nrow(gene.counts)) {
-    s1<-gene.counts[r,2:11]
+    s1<-gene.counts[r,2:ncol(gene.counts)]
     hit<-repeat.counts$geneName==gene.counts$geneName[r]
     s2<-repeat.counts[hit,]
     s3<-c(rep("T",5), rep("N",5))
@@ -133,12 +133,12 @@ make_glm<-function(gene.counts,repeat.counts){
     names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily),"group")
     output[1:length(s1),1]<-as.numeric(s1)
     for (var in 1:(ncol(output)-2)){
-      output[1:length(s2[var,4:13]),var+1]<- as.numeric(s2[var,4:13])
+      output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
     }
     output[1:length(s3),ncol(output)]<-as.character(s3)
     if(r>1){
       l<-list.append(l,output)
-    }else{
+    }else if (r==1){
       l<-output
     }
   }
