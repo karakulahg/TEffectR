@@ -90,7 +90,7 @@ rm_count<-function(bamlist,namelist,ranges){
   return(counts)
 }
 
-co_summarise <-function(counts,namelist){
+summarise_rm_count <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
     b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatFamily=counts$repeat_family), FUN=sum)
@@ -98,7 +98,7 @@ co_summarise <-function(counts,namelist){
   }
 }
 
-make_matrix<-function(genes, genes.expr,repeats.expr){
+merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
   df1<-genes[,5:6]
   y<- data.frame(geneID = row.names(genes.expr), genes.expr)
   df<-merge(df1,y,by="geneID")
@@ -121,28 +121,45 @@ get_dge_transformation<- function(count.matrix){
 }
 
 
-make_glm<-function(gene.counts,repeat.counts){
+apply_lm<-function(dge.transformation,repeat.counts,group){
   l<-list()
-  for (r in 1:nrow(gene.counts)) {
-    s1<-gene.counts[r,2:ncol(gene.counts)]
-    hit<-repeat.counts$geneName==gene.counts$geneName[r]
-    s2<-repeat.counts[hit,]
-    s3<-c(rep("T",5), rep("N",5))
-    goalsMenu <- s2$repeatFamily
-    output <- as.data.frame(matrix(rep(0, 2 + length(goalsMenu)), nrow=1))
-    names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily),"group")
-    output[1:length(s1),1]<-as.numeric(s1)
-    for (var in 1:(ncol(output)-2)){
-      output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
+  gene.counts<-count.matrix[row.names(dge$E),]
+  s3<-group
+  if(length(s3)==(ncol(gene.counts)-1)){
+    for (r in 1:nrow(gene.counts)) {
+      s1<-gene.counts[r,2:ncol(gene.counts)]
+      hit<-repeat.counts$geneName==gene.counts$geneName[r]
+      s2<-repeat.counts[hit,]
+      if(nrow(s2)>0){
+        goalsMenu <- s2$repeatFamily
+        output <- as.data.frame(matrix(rep(0, 2 + length(goalsMenu)), nrow=1))
+        names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily),"group")
+        output[1:length(s1),1]<-as.numeric(s1)
+        for (var in 1:(ncol(output)-2)){
+          output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
+        }
+        output[1:length(s3),ncol(output)]<-as.character(s3)
+        colnames(output)[1]<-gsub("-","_",colnames(output)[1])
+        if(r>1){
+          formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
+          lm.out<-lm(formula = formula , data=output)
+          l<-list.append(l,lm.out)
+          # l<-list.append(l,output)
+        }else if (r==1){
+          formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
+          lm.out<-lm(formula = formula , data=output)
+          l<-list.append(list(lm.out))
+          # l<-list.append(list(output))
+        }
+      }
+
     }
-    output[1:length(s3),ncol(output)]<-as.character(s3)
-    if(r>1){
-      l<-list.append(l,output)
-    }else if (r==1){
-      l<-output
-    }
+    return(l)
+  }else{
+    print("number of group does not match with sample number of gene count matrix please check it ! ")
+    return(NULL)
   }
-  return(l)
+
 }
 
 
