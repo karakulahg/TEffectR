@@ -139,6 +139,7 @@
 #    # # df<-df[,2:12] #gene.counts
 #
 #    s3<-c(rep("T",5), rep("N",5)) # to define a group
+#    x <- data.frame("Data" =c(rep("T",5), rep("N",5)), "Age" = c(rep(13,2), rep(24,3), rep(32,4),23), "Sex" = c(rep("F",5),rep("M",5)))
 #    glm_list<-apply_lm(dge.transformation = dge, repeat.counts = summ , group = s3)
 #
 #    write.table(last, file="matrix-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)

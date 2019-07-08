@@ -1,12 +1,12 @@
-\name{summarise_rm_count}
-\alias{summarise_rm_count}
+\name{summarise_repeat_counts}
+\alias{summarise_repeat_counts}
 \title{To summarise counts of repeats as gene name and repeat class}
 \description{
   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   \code{save}.
 }
 \usage{
-  summarise_rm_count(counts, namelist)
+  summarise_repeat_counts(counts, namelist)
 }
 \arguments{
   \item{counts}{}
@@ -17,7 +17,7 @@
   \code{\link{}}.
 }\examples{
   ## summarising repeats.counts matrix
-  co_summarise(counts = repeats.counts, namelist = namelist)
+  summarise_repeat_counts(counts = repeats.counts, namelist = namelist)
 }
 
 \keyword{file}

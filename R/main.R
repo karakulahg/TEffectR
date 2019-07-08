@@ -72,7 +72,7 @@ rm_format <- function(filepath){
 }
 
 
-rm_count<-function(bamlist,namelist,ranges){
+count_repeats<-function(bamlist,namelist,ranges){
   bamfiles<-paste(bamlist, collapse = ' ')
   bamFile <- BamFile(bamlist[1])
   if(stringr::str_detect(seqnames(seqinfo(bamFile)),"chr")==FALSE){
@@ -90,7 +90,7 @@ rm_count<-function(bamlist,namelist,ranges){
   return(counts)
 }
 
-summarise_rm_count <-function(counts,namelist){
+summarise_repeat_counts <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
     b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatFamily=counts$repeat_family), FUN=sum)
@@ -99,7 +99,7 @@ summarise_rm_count <-function(counts,namelist){
 }
 
 merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
-  df1<-genes[,5:6]
+  df1<-gene.annotation[,5:6]
   y<- data.frame(geneID = row.names(genes.expr), genes.expr)
   df<-merge(df1,y,by="geneID")
   df<-df[,2:ncol(df)]
@@ -121,7 +121,7 @@ merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
 # }
 
 
-apply_lm<-function(count.matrix,repeat.counts,group){
+apply_lm<-function(count.matrix,repeat.counts,covariate){
 
   dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
   keep <- filterByExpr(dge, min.total.count=10)
@@ -131,21 +131,22 @@ apply_lm<-function(count.matrix,repeat.counts,group){
 
   l<-list()
   gene.counts<-count.matrix[row.names(v$E),]
-  s3<-group
-  if(length(s3)==(ncol(gene.counts)-1)){
+  # s3<-group
+  if(nrow(covariate)==(ncol(gene.counts)-1)){
     for (r in 1:nrow(gene.counts)) {
       s1<-gene.counts[r,2:ncol(gene.counts)]
       hit<-repeat.counts$geneName==gene.counts$geneName[r]
       s2<-repeat.counts[hit,]
       if(nrow(s2)>0){
         goalsMenu <- s2$repeatFamily
-        output <- as.data.frame(matrix(rep(0, 2 + length(goalsMenu)), nrow=1))
-        names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily),"group")
+        output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
+        names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily))
         output[1:length(s1),1]<-as.numeric(s1)
-        for (var in 1:(ncol(output)-2)){
+        for (var in 1:(ncol(output)-1)){
           output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
         }
-        output[1:length(s3),ncol(output)]<-as.character(s3)
+        # output[1:length(s3),ncol(output)]<-as.character(s3)
+        output<-cbind(output,covariate)
         colnames(output)[1]<-gsub("-","_",colnames(output)[1])
         if(r>1){
           formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")

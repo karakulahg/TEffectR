@@ -1,12 +1,12 @@
-\name{rm_count}
-\alias{rm_count}
+\name{count_repeats}
+\alias{count_repeats}
 \title{Counting repeats the number of overlaps in each BAM file }
 \description{
   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   \code{save}.
 }
 \usage{
-  rm_count<-function(bamlist,namelist,ranges)
+  count_repeats(bamlist,namelist,ranges)
 }
 \arguments{
   \item{bamlist}{}
@@ -18,7 +18,7 @@
   \code{\link{}}.
 }\examples{
   ## counting repeats
-  rm_count(bamlist = bamlist, namelist = namelist, ranges = ranges)
+  count_repeats(bamlist = bamlist, namelist = namelist, ranges = ranges)
 }
 
 \keyword{file}
