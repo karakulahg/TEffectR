@@ -111,19 +111,26 @@ merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
   return(last)
 }
 
-get_dge_transformation<- function(count.matrix){
+# get_dge_transformation<- function(count.matrix){
+#   dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
+#   keep <- filterByExpr(dge, min.total.count=10)
+#   dge <- dge[keep, keep.lib.sizes=FALSE]
+#   dge <- calcNormFactors(dge)
+#   v <- voom(dge)
+#   return(v)
+# }
+
+
+apply_lm<-function(count.matrix,repeat.counts,group){
+
   dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
   keep <- filterByExpr(dge, min.total.count=10)
   dge <- dge[keep, keep.lib.sizes=FALSE]
   dge <- calcNormFactors(dge)
   v <- voom(dge)
-  return(v)
-}
 
-
-apply_lm<-function(dge.transformation,repeat.counts,group){
   l<-list()
-  gene.counts<-count.matrix[row.names(dge$E),]
+  gene.counts<-count.matrix[row.names(v$E),]
   s3<-group
   if(length(s3)==(ncol(gene.counts)-1)){
     for (r in 1:nrow(gene.counts)) {
