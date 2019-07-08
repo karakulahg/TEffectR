@@ -121,7 +121,7 @@ merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
 # }
 
 
-apply_lm<-function(count.matrix,repeat.counts,covariate){
+apply_lm<-function(count.matrix,repeat.counts,covariates){
 
   dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
   keep <- filterByExpr(dge, min.total.count=10)
@@ -132,7 +132,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariate){
   l<-list()
   gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
-  if(nrow(covariate)==(ncol(gene.counts)-1)){
+  if(nrow(covariates)==(ncol(gene.counts)-1)){
     for (r in 1:nrow(gene.counts)) {
       s1<-gene.counts[r,2:ncol(gene.counts)]
       hit<-repeat.counts$geneName==gene.counts$geneName[r]
@@ -146,7 +146,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariate){
           output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
         }
         # output[1:length(s3),ncol(output)]<-as.character(s3)
-        output<-cbind(output,covariate)
+        output<-cbind(output,covariates)
         colnames(output)[1]<-gsub("-","_",colnames(output)[1])
         if(r>1){
           formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
