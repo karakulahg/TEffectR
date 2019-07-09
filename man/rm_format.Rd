@@ -2,14 +2,14 @@
 \alias{rm_format}
 \title{Formatting repeat masker file}
 \description{
-  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Repeat annotation file is downloaded from http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html then the file is reformatted with this function.
   \code{save}.
 }
 \usage{
   rm_format(filepath)
 }
 \arguments{
-  \item{filepath}{}
+  \item{filepath}{it is a character that refers directory of downloaded repeat file.}
 
 }
 \seealso{

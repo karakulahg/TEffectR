@@ -1,6 +1,6 @@
 \name{summarise_repeat_counts}
 \alias{summarise_repeat_counts}
-\title{To summarise counts of repeats as gene name and repeat class}
+\title{To summarise counts of repeats as gene name and repeat family}
 \description{
   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   \code{save}.

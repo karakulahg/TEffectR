@@ -31,7 +31,7 @@ get_intervals <- function(x, organism, ID.type, URL){
 }
 
 # the function is called as b is returned overlap positions between genes and repeats
-get_overlaps <- function(g,r,strand,distance,repeat_class=NULL){
+get_overlaps <- function(g,r,strand,distance,repeat_classL){
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
     if(!is.null(repeat_class)){
       hit<-r$repeat_class==repeat_class
