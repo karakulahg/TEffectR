@@ -63,8 +63,8 @@ get_overlaps <- function(g,r,strand,distance,repeat_classL){
 
 
 rm_format <- function(filepath){
-  dt<-read_rm(filepath)
-  last<-as.data.frame(str_split_fixed(dt$matching_class, "/", 2))
+  dt<-biomartr::read_rm(filepath)
+  last<-as.data.frame(stringr::str_split_fixed(dt$matching_class, "/", 2))
   dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat_name"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
   dt$strand<-as.character(dt$strand)
   dt$strand <- replace(dt$strand, dt$strand=="C", "-")
@@ -74,9 +74,9 @@ rm_format <- function(filepath){
 
 count_repeats<-function(bamlist,namelist,ranges){
   bamfiles<-paste(bamlist, collapse = ' ')
-  bamFile <- BamFile(bamlist[1])
-  if(stringr::str_detect(seqnames(seqinfo(bamFile)),"chr")==FALSE){
-    data <-as.character(lapply(seqlevels(ranges), function(x){gsub("chr", " ", x)}))
+  bamFile <- Rsamtools::BamFile(bamlist[1])
+  if(stringr::str_detect(GenomeInfoDb::seqnames(GenomeInfoDb::seqinfo(bamFile)),"chr")==FALSE){
+    data <-as.character(lapply(GenomeInfoDb::seqlevels(ranges), function(x){gsub("chr", " ", x)}))
     seqlevels(ranges)<-data
   }
   df<-as.data.frame(ranges)
@@ -123,11 +123,11 @@ merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
 
 apply_lm<-function(count.matrix,repeat.counts,covariates){
 
-  dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
-  keep <- filterByExpr(dge, min.total.count=10)
+  dge <- edgeR::DGEList(count.matrix[,2:ncol(count.matrix)])
+  keep <- edgeR::filterByExpr(dge, min.total.count=10)
   dge <- dge[keep, keep.lib.sizes=FALSE]
-  dge <- calcNormFactors(dge)
-  v <- voom(dge)
+  dge <- edgeR::calcNormFactors(dge)
+  v <- limma::voom(dge)
 
   l<-list()
   gene.counts<-count.matrix[row.names(v$E),]

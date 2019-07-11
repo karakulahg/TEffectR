@@ -6,6 +6,16 @@ Date: 2019-05-14
 Author: Nazmiye Arslan
 Maintainer: Developer <nzmye.arslan01@gmail.com>
 Depends: R (>= 3.5.0)
+Imports:
+    dplyr,
+    GenomicRanges,
+    biomaRt,
+    biomartr,
+    Rsamtools,
+    edgeR,
+    limma,
+    rlist,
+    stringr
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?

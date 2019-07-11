@@ -1,6 +1,3 @@
-library(dplyr)
-library(GenomicRanges)
-
 
 getUpstream <- function(df,length, isWithGeneBody){ # to get genome interval of up stream of given genome
 
@@ -55,15 +52,14 @@ getDownAndUpStream <- function(df,len_up,len_down){ # to get genome interval of 
 
 
 makeGRangeObj <- function(df){  # to make grange object to analysis genome arithmetics well
-  library(GenomicRanges)
-  gr <- with(df, GRanges(chr, IRanges(start, end), strand = strand))
+  gr <- with(df, GenomicRanges::GRanges(chr, IRanges(start, end), strand = strand))
   values(gr)<-df[,5:length(df)]
   values(gr)<-cbind(values(gr),df[2:3])
   return(gr)
 }
 
 makeGrObj_Unstrand <- function(df){  #within strandness
-  gr <- with(df, GRanges(chr, IRanges(start, end), strand = "*"))
+  gr <- with(df, GenomicRanges::GRanges(chr, IRanges(start, end), strand = "*"))
   values(gr)<-df[,5:length(df)]
   values(gr)<-cbind(values(gr),df[2:3])
   return(gr)
@@ -74,7 +70,7 @@ toFindOverlaps<-function(gr_repeats,gr_genome){  #to get overlap in general func
   # Find overlaps
   names(values(gr_genome))[3:4]<-c("gStart","gEnd")
   names(values(gr_repeats))[4:5]<-c("rStart","rEnd")
-  m <- findOverlaps(gr_genome, gr_repeats)
+  m <- GenomicRanges::findOverlaps(gr_genome, gr_repeats)
   gr_genome.matched <- gr_genome[queryHits(m)]
 
   # Add the metadata from gr2

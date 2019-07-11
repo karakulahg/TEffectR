@@ -5,3 +5,12 @@ exportPattern("count_repeats")
 exportPattern("summarise_repeat_counts")
 exportPattern("merge_counts")
 exportPattern("apply_lm")
+#' @import dplyr
+#' @import GenomicRanges
+#' @import biomaRt
+#' @import biomartr
+#' @import Rsamtools
+#' @import edgeR
+#' @import limma
+#' @import rlist
+#' @import stringr

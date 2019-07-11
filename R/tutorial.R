@@ -146,42 +146,41 @@
 
 
 
-glm_list[[4]]$model
-summary(glm_list[[4]])$r.squared #!
-summary(glm_list[[4]])$adj.r.squared #!
-summary(glm_list[[4]])$fstatistic
-summary(glm_list[[4]])$coefficients
-summary(glm_list[[4]])$coefficients[,4]
-summary(glm_list[[4]])
-
-lmp <- function (modelobject) {
-  if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
-  f <- summary(modelobject)$fstatistic
-  p <- pf(f[1],f[2],f[3],lower.tail=F)
-  attributes(p) <- NULL
-  return(p)
-}
-
-lmp(glm_list[[4]]) #!
-
-
-
-y<-data.frame()
-y<-as.data.frame(matrix(ncol=5,nrow=34))
-names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value")
-id<-1
-for (list in glm_list) {
-
-  y$GeneName[id]<-colnames(list$model)[1]
-  y$`Repeats-family/families`[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncol(covariates))],collapse = " ")
-  y$r.squared[id]<-summary(list)$r.squared
-  y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
-  y$`model-p.value`[id]<-lmp(list)
-  id<-id+1
-
-}
-
-
-write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
+# glm_list[[4]]$model
+# summary(glm_list[[4]])$r.squared #!
+# summary(glm_list[[4]])$adj.r.squared #!
+# summary(glm_list[[4]])$fstatistic
+# summary(glm_list[[4]])$coefficients
+# summary(glm_list[[4]])$coefficients[,4]
+# summary(glm_list[[4]])
+#
+# lmp <- function (modelobject) {
+#   if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
+#   f <- summary(modelobject)$fstatistic
+#   p <- pf(f[1],f[2],f[3],lower.tail=F)
+#   attributes(p) <- NULL
+#   return(p)
+# }
+#
+# lmp(glm_list[[4]]) #!
+#
+#
+#
+# y<-data.frame()
+# y<-as.data.frame(matrix(ncol=5,nrow=34))
+# names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value")
+# id<-1
+# for (list in glm_list) {
+#
+#   y$GeneName[id]<-colnames(list$model)[1]
+#   y$`Repeats-family/families`[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncol(covariates))],collapse = " ")
+#   y$r.squared[id]<-summary(list)$r.squared
+#   y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
+#   y$`model-p.value`[id]<-lmp(list)
+#   id<-id+1
+#
+# }
+#
+# write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
 
 
