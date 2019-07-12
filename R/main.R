@@ -174,7 +174,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariates){
 
 writingResultOfLM<-function(lm_list,covariates){
   y<-data.frame()
-  y<-as.data.frame(matrix(ncol=6,nrow=34))
+  y<-as.data.frame(matrix(ncol=6,nrow=length(lm_list)))
   names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
   id<-1
   for (list in lm_list) {
@@ -183,8 +183,8 @@ writingResultOfLM<-function(lm_list,covariates){
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
-    n<-summary(list[[id]])$coefficients[,4]
-    y$`indivudual-p.vals`[id]<-paste(names(n)[-1],n[-1],sep = " : ",collapse = " ")
+    n<-summary(list)$coefficients[,4]
+    y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " ")
     id<-id+1
   }
   write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
