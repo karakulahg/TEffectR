@@ -144,7 +144,7 @@
 #    write.table(last, file="matrix-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 #
 
-
+# glm_list<-apply_lm(count.matrix,summ , x)
 
 # glm_list[[5]]$model
 # summary(glm_list[[4]])$r.squared #!

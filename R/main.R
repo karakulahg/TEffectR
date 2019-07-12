@@ -162,7 +162,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariates){
       }
 
     }
-    writingResultOfLM(l)
+    writingResultOfLM(l,covariates)
     return(l)
   }else{
     print("number of group does not match with sample number of gene count matrix please check it ! ")
@@ -172,7 +172,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariates){
 }
 
 
-writingResultOfLM<-function(lm_list){
+writingResultOfLM<-function(lm_list,covariates){
   y<-data.frame()
   y<-as.data.frame(matrix(ncol=6,nrow=34))
   names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
@@ -184,7 +184,7 @@ writingResultOfLM<-function(lm_list){
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
     if((ncol(list$model)-ncol(covariates))!=ncol(covariates)-1){
-      y$`indivudual-p.vals`[id]<-paste(paste(summary(glm_list[[id]])$coefficients[,4])[2:(ncol(list$model)-ncol(covariates))], collapse = " ")
+      y$`indivudual-p.vals`[id]<-paste(paste(summary(lm_list[[id]])$coefficients[,4])[2:(ncol(list$model)-ncol(covariates))], collapse = " ")
     }else{
       y$`indivudual-p.vals`[id]<-"NA"
     }
