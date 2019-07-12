@@ -1,6 +1,6 @@
 # TEffectR
 This repo is a R package. It is developped by Nazmiye Arslan. 
-Email : nzmye.arslan01@gmail.com 
+> Email : nzmye.arslan01@gmail.com 
 ### What does this package use for ? 
 
 
@@ -21,36 +21,50 @@ Email : nzmye.arslan01@gmail.com
     - [stringr](https://github.com/tidyverse/stringr)
 
 ### How to install this R package ?
-> library(devtools)
-> devtools::install_github("karakulahg/TEffectR")
+```
+
+library(devtools)
+
+devtools::install_github("karakulahg/TEffectR")
+
+```
 
 ### How does it work?
 
 1. Load the library :
+```
 
-> library(TEffectR)
+library(TEffectR)
 
+```
 
 2. For repeat annotation download [repeatmasker](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html)
 
 3. Read your repeat annotaion and format it. This example for hg38:
+```
 
-> rm <- rm_format(filepath = "~/Downloads/hg38.fa.out.gz" )
+rm <- rm_format(filepath = "~/Downloads/hg38.fa.out.gz" )
 
+```
 4. To Read gene or transcript expression file :
+```
 
-> x<-read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
+x<-read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
 
+```
 5. For filter gene annotation from Biomart :
 
-    - The URL option which you use annotation release is a link. you can these from [this link](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html) or you can list by this R code:
+    - The URL option which you use annotation release is a link. you can these from [this link](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html) or you can list by this R code:  
     
-    > biomaRt::listEnsemblArchives()
+        ```
+        biomaRt::listEnsemblArchives()    
+        ```
     
     - ID.type can be ensembl_gene_name, ensembl_transcript_id, ensembl_transcript_id_version, ensembl_gene_id_version, ensembl_gene_id.
     
     - For this example :
+    
+        ```
+        genes <- get_intervals(x = rownames(x), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) 
 
-> genes <- get_intervals(x = rownames(x), organism="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) 
-
-
+        ```
