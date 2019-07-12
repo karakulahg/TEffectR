@@ -146,12 +146,12 @@
 
 
 
-# glm_list[[4]]$model
+# glm_list[[5]]$model
 # summary(glm_list[[4]])$r.squared #!
 # summary(glm_list[[4]])$adj.r.squared #!
 # summary(glm_list[[4]])$fstatistic
-# summary(glm_list[[4]])$coefficients
-# summary(glm_list[[4]])$coefficients[,4]
+# summary(glm_list[[5]])$coefficients
+# summary(glm_list[[5]])$coefficients[,4]
 # summary(glm_list[[4]])
 #
 # lmp <- function (modelobject) {
@@ -167,8 +167,8 @@
 #
 #
 # y<-data.frame()
-# y<-as.data.frame(matrix(ncol=5,nrow=34))
-# names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value")
+# y<-as.data.frame(matrix(ncol=6,nrow=34))
+# names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
 # id<-1
 # for (list in glm_list) {
 #
@@ -177,6 +177,12 @@
 #   y$r.squared[id]<-summary(list)$r.squared
 #   y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
 #   y$`model-p.value`[id]<-lmp(list)
+#   if((ncol(list$model)-ncol(covariates))!=ncol(covariates)-1){
+#     y$`indivudual-p.vals`[id]<-paste(paste(summary(glm_list[[id]])$coefficients[,4])[2:(ncol(list$model)-ncol(covariates))], collapse = " ")
+#   }else{
+#     y$`indivudual-p.vals`[id]<-"NA"
+#   }
+#
 #   id<-id+1
 #
 # }

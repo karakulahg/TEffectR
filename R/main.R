@@ -128,7 +128,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariates){
   dge <- dge[keep, keep.lib.sizes=FALSE]
   dge <- edgeR::calcNormFactors(dge)
   v <- limma::voom(dge)
-
+  writingResultOfVoom(v)
   l<-list()
   gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
@@ -162,6 +162,7 @@ apply_lm<-function(count.matrix,repeat.counts,covariates){
       }
 
     }
+    writingResultOfLM(l)
     return(l)
   }else{
     print("number of group does not match with sample number of gene count matrix please check it ! ")
@@ -171,5 +172,27 @@ apply_lm<-function(count.matrix,repeat.counts,covariates){
 }
 
 
+writingResultOfLM<-function(lm_list){
+  y<-data.frame()
+  y<-as.data.frame(matrix(ncol=6,nrow=34))
+  names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
+  id<-1
+  for (list in lm_list) {
+    y$GeneName[id]<-colnames(list$model)[1]
+    y$`Repeats-family/families`[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncol(covariates))],collapse = " ")
+    y$r.squared[id]<-summary(list)$r.squared
+    y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
+    y$`model-p.value`[id]<-lmp(list)
+    if((ncol(list$model)-ncol(covariates))!=ncol(covariates)-1){
+      y$`indivudual-p.vals`[id]<-paste(paste(summary(glm_list[[id]])$coefficients[,4])[2:(ncol(list$model)-ncol(covariates))], collapse = " ")
+    }else{
+      y$`indivudual-p.vals`[id]<-"NA"
+    }
+    id<-id+1
+  }
+  write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
+}
 
-
+writingResultOfVoom<-function(v){
+  write.table(v,"results-of-voom.csv", quote=F, sep="\t",row.names = T,col.names = T)
+}
