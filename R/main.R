@@ -3,22 +3,22 @@ source("R/biomart.R")
 source("R/genomicRanges.R")
 
 # the function that to filter biomart and return genome information.
-get_intervals <- function(x, organism, ID.type, URL){
+get_intervals <- function(x, assembly, ID.type, URL){
   if(length(x)>0 & is.character(ID.type)){
     if(ID.type=="ensembl_gene_name"){
-      df<-filterGeneName(x,organism,URL)
+      df<-filterGeneName(x,assembly,URL)
       return(df)
     }else if(ID.type=="ensembl_transcript_id"){
-      df<-filterTranscriptID(x,organism,URL)
+      df<-filterTranscriptID(x,assembly,URL)
       return(df)
     }else if(ID.type=="ensembl_transcript_id_version"){
-      df<-filterTranscriptID_V(x,organism,URL)
+      df<-filterTranscriptID_V(x,assembly,URL)
       return(df)
     }else if(ID.type=="ensembl_gene_id_version"){
-      df<-filterGeneID_V(x,organism,URL)
+      df<-filterGeneID_V(x,assembly,URL)
       return(df)
     }else if(ID.type=="ensembl_gene_id"){
-      df<-filterGeneID(x,organism,URL)
+      df<-filterGeneID(x,assembly,URL)
       return(df)
     }else{
       return(NULL)
@@ -183,11 +183,8 @@ writingResultOfLM<-function(lm_list,covariates){
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
-    if((ncol(list$model)-ncol(covariates))!=ncol(covariates)-1){
-      y$`indivudual-p.vals`[id]<-paste(paste(summary(lm_list[[id]])$coefficients[,4])[2:(ncol(list$model)-ncol(covariates))], collapse = " ")
-    }else{
-      y$`indivudual-p.vals`[id]<-"NA"
-    }
+    n<-summary(glm_list[[id]])$coefficients[,4]
+    y$`indivudual-p.vals`[id]<-paste(names(n)[-1],n[-1],sep = " : ",collapse = " ")
     id<-id+1
   }
   write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
