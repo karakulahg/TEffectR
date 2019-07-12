@@ -98,18 +98,18 @@ summarise_repeat_counts <-function(counts,namelist){
   }
 }
 
-merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
-  df1<-gene.annotation[,5:6]
-  y<- data.frame(geneID = row.names(genes.expr), genes.expr)
-  df<-merge(df1,y,by="geneID")
-  df<-df[,2:ncol(df)]
-
-  e1<-repeats.expr[,4:ncol(repeats.expr)]
-  e1$geneName <- seq.int(nrow(e1))
-  e1 <- e1 %>% select(geneName,everything())
-  last<-rbind(df,e1)
-  return(last)
-}
+# merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
+#   df1<-gene.annotation[,5:6]
+#   y<- data.frame(geneID = row.names(genes.expr), genes.expr)
+#   df<-merge(df1,y,by="geneID")
+#   df<-df[,2:ncol(df)]
+#
+#   e1<-repeats.expr[,4:ncol(repeats.expr)]
+#   e1$geneName <- seq.int(nrow(e1))
+#   e1 <- e1 %>% select(geneName,everything())
+#   last<-rbind(df,e1)
+#   return(last)
+# }
 
 # get_dge_transformation<- function(count.matrix){
 #   dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
@@ -121,14 +121,36 @@ merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
 # }
 
 
-apply_lm<-function(count.matrix,repeat.counts,covariates){
+apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
 
+  # to merge counts
+  df1<-gene.annotation[,5:6]
+  y<- data.frame(geneID = row.names(gene.counts), gene.counts)
+  df<-merge(df1,y,by="geneID")
+  df<-df[,2:ncol(df)]
+  e1<-repeat.counts[,4:ncol(repeat.counts)]
+  e1$geneName <- seq.int(nrow(e1))
+  e1 <- e1 %>% select(geneName,everything())
+  count.matrix<-rbind(df,e1)
+
+
+  # to apply filter and TMM normalization then apply voom
   dge <- edgeR::DGEList(count.matrix[,2:ncol(count.matrix)])
   keep <- edgeR::filterByExpr(dge, min.total.count=10)
   dge <- dge[keep, keep.lib.sizes=FALSE]
   dge <- edgeR::calcNormFactors(dge)
   v <- limma::voom(dge)
-  writingResultOfVoom(v)
+
+  vall<-count.matrix[row.names(v$E),]
+  v_ids_for_repeats<-setdiff(vall[,1],df$geneName) #to get row ids of repeats which are passed from voom translation
+  col_indexes <- which(vall[,1] %in% v_ids_for_repeats)
+  temp<-repeat.counts[v_ids_for_repeats,]
+  tt<-paste(temp$repeatClass,temp$repeatFamily,sep = "-")
+  vall$geneName[col_indexes]<-tt
+
+  writingResultOfVoom(vall)
+
+
   l<-list()
   gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
@@ -191,5 +213,5 @@ writingResultOfLM<-function(lm_list,covariates){
 }
 
 writingResultOfVoom<-function(v){
-  write.table(v,"results-of-voom.csv", quote=F, sep="\t",row.names = T,col.names = T)
+  write.table(v,"results-of-voom.csv", quote=F, sep="\t",row.names = F,col.names = T)
 }
