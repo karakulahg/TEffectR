@@ -183,7 +183,7 @@ writingResultOfLM<-function(lm_list,covariates){
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
-    n<-summary(glm_list[[id]])$coefficients[,4]
+    n<-summary(list[[id]])$coefficients[,4]
     y$`indivudual-p.vals`[id]<-paste(names(n)[-1],n[-1],sep = " : ",collapse = " ")
     id<-id+1
   }
