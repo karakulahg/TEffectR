@@ -126,7 +126,7 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   # to merge counts
   df1<-gene.annotation[,5:6]
   y<- data.frame(geneID = row.names(gene.counts), gene.counts)
-  df<-merge(df1,y,by="geneID")
+  df<-merge(df1,y,by="geneID") # finding gene names as geneid
   df<-df[,2:ncol(df)]
   e1<-repeat.counts[,4:ncol(repeat.counts)]
   e1$geneName <- seq.int(nrow(e1))
@@ -144,25 +144,26 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   vall<-count.matrix[row.names(v$E),]
   v_ids_for_repeats<-setdiff(vall[,1],df$geneName) #to get row ids of repeats which are passed from voom translation
   col_indexes <- which(vall[,1] %in% v_ids_for_repeats)
-  temp<-repeat.counts[v_ids_for_repeats,]
-  tt<-paste(temp$repeatClass,temp$repeatFamily,sep = "-")
+  temp<-repeat.counts[v_ids_for_repeats,] # repeat counts with assoiated with genes
+  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = "-")
   vall$geneName[col_indexes]<-tt
 
-  writingResultOfVoom(vall)
+  voom_data<-cbind(vall$geneName,v$E)
+  writingResultOfVoom(voom_data)
 
 
   l<-list()
-  gene.counts<-count.matrix[row.names(v$E),]
+  # gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
-  if(nrow(covariates)==(ncol(gene.counts)-1)){
-    for (r in 1:nrow(gene.counts)) {
-      s1<-gene.counts[r,2:ncol(gene.counts)]
-      hit<-repeat.counts$geneName==gene.counts$geneName[r]
-      s2<-repeat.counts[hit,]
+  if(nrow(covariates)==(ncol(gene.counts))){
+    for (r in 1:nrow(temp)) {
+      hit<-df$geneName==temp$geneName[r]
+      s1<-df[hit,2:ncol(df)]  # for gene counts
+      s2<-temp[r,] # for repeat counts
       if(nrow(s2)>0){
         goalsMenu <- s2$repeatFamily
         output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
-        names(output) <- c(gene.counts$geneName[r], as.vector(s2$repeatFamily))
+        names(output) <- c(as.character(s2$geneName), as.vector(s2$repeatFamily))
         output[1:length(s1),1]<-as.numeric(s1)
         for (var in 1:(ncol(output)-1)){
           output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
