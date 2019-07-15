@@ -145,7 +145,7 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   v_ids_for_repeats<-setdiff(vall[,1],df$geneName) #to get row ids of repeats which are passed from voom translation
   col_indexes <- which(vall[,1] %in% v_ids_for_repeats)
   temp<-repeat.counts[v_ids_for_repeats,] # repeat counts with assoiated with genes
-  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = ",")
+  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = ":")
   vall$geneName[col_indexes]<-tt
 
   voom_data<-cbind(vall$geneName,v$E)
@@ -155,15 +155,17 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   # gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
   if(nrow(covariates)==(ncol(count.matrix)-1)){
-    for (r in 1:nrow(temp)) {
+    unique.repeats<-unique(temp$geneName)
+    for (r in 1:length(unique.repeats)) {
       # print(r)
-      hit<-count.matrix$geneName == as.character(temp$geneName[r])
-      s1<-count.matrix[hit,2:ncol(vall)]  # for gene counts
-      s2<-temp[r,] # for repeat counts
-      if(nrow(s1)==1 & nrow(s2)){
-        goalsMenu <- s2$repeatFamily
+      hit1<-count.matrix$geneName == as.character(unique.repeats[r])
+      s1<-count.matrix[hit1,2:ncol(vall)]  # for gene counts
+      hit2<-temp$geneName == as.character(unique.repeats[r])
+      s2<-temp[hit2,] # for repeat counts
+      if(nrow(s1)==1 & nrow(s2)>0){
+        goalsMenu <- as.character(s2$repeatFamily)
         output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
-        names(output) <- c(as.character(s2$geneName), as.vector(s2$repeatFamily))
+        names(output) <- c(unique(as.character(s2$geneName)), as.vector(s2$repeatFamily))
         output[1:length(s1),1]<-as.numeric(s1)
         for (var in 1:(ncol(output)-1)){
           output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
