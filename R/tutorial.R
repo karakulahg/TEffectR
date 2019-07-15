@@ -2,6 +2,7 @@
 # # ## To Read gene or transcript expression file
 # x<-read.csv("~/Documents/G.Karakulah/BC/gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
 # x<-x[1:250,]
+# x.sb<-x[7500:12500,]
 # #
 # # ######################################################################################
 # #
@@ -22,7 +23,7 @@
 # #
 # # ## for gene annotation
 # #
-#    genes<-get_intervals(x = rownames(x), organism="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) #use organism parameter if you provide gene symbols
+#    gene.annotation<-get_intervals(x = rownames(x.sb), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) #use organism parameter if you provide gene symbols
 # #
 # # ########################################################################################
 # #
@@ -38,7 +39,7 @@
 # # ###################################### <<<< 4 >>>> ######################################
 # # #
 # # #
-#    w<-get_overlaps(g = genes, r = rm, strand = "same", distance = 10000, repeat_class = "LINE")
+#    overlapped.results<-get_overlaps(g = gene.annotation, r = rm, strand = "same", distance = 10000, repeat_class = "LINE")
 # # #
 # # # write.table(w, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
 # # #
@@ -110,24 +111,19 @@
 #
 #    namelist<- c("SRR5962198","SRR5962199","SRR5962200","SRR5962201","SRR5962202","SRR5962203","SRR5962204","SRR5962205","SRR5962206","SRR5962207")
 #
-#    write.table(w, file="overlapped.csv", quote=F, sep="\t", row.names=F, col.names=T)
+#    write.table(overlapped.results, file="overlapped.csv", quote=F, sep="\t", row.names=F, col.names=T)
 #
-#    e<-rm_count(bamlist = bamlist, namelist, ranges=w) #for counting
+#    repeat.counts<-count_repeats(bamlist = bamlist, namelist, ranges= overlapped.results) #for counting
 #
-#    summ<-co_summarise(e, namelist) #repeat.counts
-#
-#
-#    write.table(e, file="counts-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
-#
-#    write.table(summ, file="summarized-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
+#   sum.repeat.counts<-summarise_repeat_counts(repeat.counts, namelist) #repeat.counts
 #
 #
-#    genes.expr<-x
-#    repeats.expr<-summ
+#    write.table(repeat.counts, file="counts-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 #
-#    merge_counts<-make_matrix(gene.annotation = genes, genes.expr = x[,1:10], repeats.expr = summ )
+#    write.table(sum.repeat.counts, file="summarized-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 #
-#    dge<-get_dge_transformation(count.matrix = count.matrix)
+#
+#
 #
 #    # for gene.counts :
 #    # # df1<-genes[,5:6] ( # x<-read.csv("~/Downloads/gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F))
@@ -143,7 +139,7 @@
 #
 #    write.table(last, file="matrix-all-samples.csv", quote=F, sep="\t", row.names=F, col.names=T)
 #
-
+# lm.list<-apply_lm(gene.annotation = gene.annotation, gene.counts = x.sb[,1:10], repeat.counts = sum.repeat.counts, covariates = x)
 # glm_list<-apply_lm(count.matrix,summ , x)
 
 # glm_list[[5]]$model

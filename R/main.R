@@ -31,7 +31,7 @@ get_intervals <- function(x, assembly, ID.type, URL){
 }
 
 # the function is called as b is returned overlap positions between genes and repeats
-get_overlaps <- function(g,r,strand,distance,repeat_classL){
+get_overlaps <- function(g,r,strand,distance,repeat_class){
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
     if(!is.null(repeat_class)){
       hit<-r$repeat_class==repeat_class
@@ -145,22 +145,22 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   v_ids_for_repeats<-setdiff(vall[,1],df$geneName) #to get row ids of repeats which are passed from voom translation
   col_indexes <- which(vall[,1] %in% v_ids_for_repeats)
   temp<-repeat.counts[v_ids_for_repeats,] # repeat counts with assoiated with genes
-  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = "-")
+  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = ",")
   vall$geneName[col_indexes]<-tt
 
   voom_data<-cbind(vall$geneName,v$E)
   writingResultOfVoom(voom_data)
 
-
   l<-list()
   # gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
-  if(nrow(covariates)==(ncol(gene.counts))){
+  if(nrow(covariates)==(ncol(count.matrix)-1)){
     for (r in 1:nrow(temp)) {
-      hit<-df$geneName==temp$geneName[r]
-      s1<-df[hit,2:ncol(df)]  # for gene counts
+      # print(r)
+      hit<-count.matrix$geneName == as.character(temp$geneName[r])
+      s1<-count.matrix[hit,2:ncol(vall)]  # for gene counts
       s2<-temp[r,] # for repeat counts
-      if(nrow(s2)>0){
+      if(nrow(s1)==1 & nrow(s2)){
         goalsMenu <- s2$repeatFamily
         output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
         names(output) <- c(as.character(s2$geneName), as.vector(s2$repeatFamily))
@@ -212,6 +212,15 @@ writingResultOfLM<-function(lm_list,covariates){
   }
   write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
 }
+
+lmp <- function (modelobject) {
+  if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
+  f <- summary(modelobject)$fstatistic
+  p <- pf(f[1],f[2],f[3],lower.tail=F)
+  attributes(p) <- NULL
+  return(p)
+}
+
 
 writingResultOfVoom<-function(v){
   write.table(v,"results-of-voom.csv", quote=F, sep="\t",row.names = F,col.names = T)
