@@ -141,12 +141,22 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   dge <- edgeR::calcNormFactors(dge)
   v <- limma::voom(dge)
 
+
   vall<-count.matrix[row.names(v$E),]
+  new_voom<-cbind(data.frame("geneName"=c(vall$geneName)),v$E)
   v_ids_for_repeats<-setdiff(vall[,1],df$geneName) #to get row ids of repeats which are passed from voom translation
   col_indexes <- which(vall[,1] %in% v_ids_for_repeats)
   temp<-repeat.counts[v_ids_for_repeats,] # repeat counts with assoiated with genes
   tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = ":")
   vall$geneName[col_indexes]<-tt
+
+
+  prepLMdata_repeats<-temp
+  prepLMdata_repeats[,4:ncol(prepLMdata_repeats)]<-new_voom[col_indexes,2:ncol(new_voom)]
+
+  v_ids_for_genes <- match(temp$geneName,new_voom$geneName)#to get row ids of genes which are passed from voom translation and associated with repeats
+  prepLMdata_genes<-na.omit(new_voom[v_ids_for_genes,])
+
 
   voom_data<-cbind(vall$geneName,v$E)
   writingResultOfVoom(voom_data)
@@ -155,13 +165,13 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   # gene.counts<-count.matrix[row.names(v$E),]
   # s3<-group
   if(nrow(covariates)==(ncol(count.matrix)-1)){
-    unique.repeats<-unique(temp$geneName)
+    unique.repeats<-unique(prepLMdata_repeats$geneName)
     for (r in 1:length(unique.repeats)) {
       # print(r)
-      hit1<-count.matrix$geneName == as.character(unique.repeats[r])
-      s1<-count.matrix[hit1,2:ncol(vall)]  # for gene counts
-      hit2<-temp$geneName == as.character(unique.repeats[r])
-      s2<-temp[hit2,] # for repeat counts
+      hit1<-prepLMdata_genes$geneName == as.character(unique.repeats[r])
+      s1<-prepLMdata_genes[hit1,2:ncol(vall)]  # for gene counts
+      hit2<-prepLMdata_repeats$geneName == as.character(unique.repeats[r])
+      s2<-prepLMdata_repeats[hit2,] # for repeat counts
       if(nrow(s1)==1 & nrow(s2)>0){
         goalsMenu <- as.character(s2$repeatFamily)
         output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
