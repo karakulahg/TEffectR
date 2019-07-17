@@ -156,7 +156,7 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
 
   v_ids_for_genes <- match(temp$geneName,new_voom$geneName)#to get row ids of genes which are passed from voom translation and associated with repeats
   prepLMdata_genes<-na.omit(new_voom[v_ids_for_genes,])
-
+  prepLMdata_genes<-unique(prepLMdata_genes)
 
   voom_data<-cbind(vall$geneName,v$E)
   writingResultOfVoom(voom_data)
