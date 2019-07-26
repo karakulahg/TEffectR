@@ -10,7 +10,7 @@ filterTranscriptID<-function(transcript_ids,assembly,URL){
                     filters = c("ensembl_transcript_id"), #listFilters(ensembl)
                     values = transcript_ids,
                     mart=ensembl,
-                    verbose = TRUE)
+                    verbose = FALSE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
       data <- data[c(3,4,5,6,1,2)]
@@ -46,7 +46,7 @@ filterTranscriptID_V<-function(transcript_ids,assembly,URL){
                     filters = c("ensembl_transcript_id_version"), #listFilters(ensembl)
                     values = transcript_ids,
                     mart=ensembl,
-                    verbose = TRUE)
+                    verbose = FALSE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
       data <- data[c(3,4,5,6,1,2)]
@@ -83,7 +83,7 @@ filterGeneName<-function(genes,assembly,URL){
                     filters = c("ensembl_gene_id"), #listFilters(ensembl)
                     values = gene_ids$ensembl_gene_id,
                     mart=ensembl,
-                    verbose = TRUE)
+                    verbose = FALSE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
       data <- data[c(3,4,5,6,1,2)]
@@ -119,7 +119,7 @@ filterGeneID_V<-function(gene_ids,assembly,URL){
                     filters = c("ensembl_gene_id_version"), # listFilters(ensembl)
                     values = gene_ids,
                     mart=ensembl,
-                    verbose = TRUE)
+                    verbose = FALSE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
       data <- data[c(3,4,5,6,1,2)]
@@ -154,7 +154,7 @@ filterGeneID<-function(gene_ids,assembly,URL){
                     filters = c("ensembl_gene_id"), # listFilters(ensembl)
                     values = gene_ids,
                     mart=ensembl,
-                    verbose = TRUE)
+                    verbose = FALSE)
 
       names(data)<-c("geneID","geneName","chr","start","end","strand")
       data <- data[c(3,4,5,6,1,2)]

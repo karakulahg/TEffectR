@@ -1,6 +1,7 @@
 
 source("R/biomart.R")
 source("R/genomicRanges.R")
+options(warn=-1)
 
 # the function that to filter biomart and return genome information.
 get_intervals <- function(x, assembly, ID.type, URL){
@@ -97,28 +98,6 @@ summarise_repeat_counts <-function(counts,namelist){
     return(b)
   }
 }
-
-# merge_counts<-function(gene.annotation, genes.expr,repeats.expr){
-#   df1<-gene.annotation[,5:6]
-#   y<- data.frame(geneID = row.names(genes.expr), genes.expr)
-#   df<-merge(df1,y,by="geneID")
-#   df<-df[,2:ncol(df)]
-#
-#   e1<-repeats.expr[,4:ncol(repeats.expr)]
-#   e1$geneName <- seq.int(nrow(e1))
-#   e1 <- e1 %>% select(geneName,everything())
-#   last<-rbind(df,e1)
-#   return(last)
-# }
-
-# get_dge_transformation<- function(count.matrix){
-#   dge<-DGEList(count.matrix[,2:ncol(count.matrix)])
-#   keep <- filterByExpr(dge, min.total.count=10)
-#   dge <- dge[keep, keep.lib.sizes=FALSE]
-#   dge <- calcNormFactors(dge)
-#   v <- voom(dge)
-#   return(v)
-# }
 
 
 apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
