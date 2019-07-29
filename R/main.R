@@ -1,7 +1,7 @@
 
 source("R/biomart.R")
 source("R/genomicRanges.R")
-options(warn=-1)
+
 
 # the function that to filter biomart and return genome information.
 get_intervals <- function(x, assembly, ID.type, URL){
@@ -33,6 +33,7 @@ get_intervals <- function(x, assembly, ID.type, URL){
 
 # the function is called as b is returned overlap positions between genes and repeats
 get_overlaps <- function(g,r,strand,distance,repeat_class){
+  options(warn=-1)
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
     if(!is.null(repeat_class)){
       hit<-r$repeat_class==repeat_class
@@ -94,13 +95,13 @@ count_repeats<-function(bamlist,namelist,ranges){
 summarise_repeat_counts <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
-    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatFamily=counts$repeat_family), FUN=sum)
+    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatName=counts$repeat_name), FUN=sum)
     return(b)
   }
 }
 
 
-apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
+apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates, prefix){
 
   # to merge counts
   df1<-gene.annotation[,5:6]
@@ -126,7 +127,7 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   v_ids_for_repeats<-setdiff(vall[,1],df$geneName) #to get row ids of repeats which are passed from voom translation
   col_indexes <- which(vall[,1] %in% v_ids_for_repeats)
   temp<-repeat.counts[v_ids_for_repeats,] # repeat counts with assoiated with genes
-  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatFamily,sep = ":")
+  tt<-paste(temp$geneName,temp$repeatClass,temp$repeatName,sep = ":")
   vall$geneName[col_indexes]<-tt
 
 
@@ -138,7 +139,7 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
   prepLMdata_genes<-unique(prepLMdata_genes)
 
   voom_data<-cbind(vall$geneName,v$E)
-  writingResultOfVoom(voom_data)
+  writingResultOfVoom(voom_data,prefix)
 
   l<-list()
   # gene.counts<-count.matrix[row.names(v$E),]
@@ -152,9 +153,9 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
       hit2<-prepLMdata_repeats$geneName == as.character(unique.repeats[r])
       s2<-prepLMdata_repeats[hit2,] # for repeat counts
       if(nrow(s1)==1 & nrow(s2)>0){
-        goalsMenu <- as.character(s2$repeatFamily)
+        goalsMenu <- as.character(s2$repeatName)
         output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
-        names(output) <- c(unique(as.character(s2$geneName)), as.vector(s2$repeatFamily))
+        names(output) <- c(unique(as.character(s2$geneName)), as.vector(s2$repeatName))
         output[1:length(s1),1]<-as.numeric(s1)
         for (var in 1:(ncol(output)-1)){
           output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
@@ -176,7 +177,7 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
       }
 
     }
-    writingResultOfLM(l,covariates)
+    writingResultOfLM(l,covariates,prefix)
     return(l)
   }else{
     print("number of group does not match with sample number of gene count matrix please check it ! ")
@@ -186,22 +187,22 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates){
 }
 
 
-writingResultOfLM<-function(lm_list,covariates){
+writingResultOfLM<-function(lm_list,covariates,prefix){
   y<-data.frame()
   y<-as.data.frame(matrix(ncol=6,nrow=length(lm_list)))
-  names(y) <- c("GeneName","Repeats-family/families" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
+  names(y) <- c("GeneName","RepeatName" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
   id<-1
   for (list in lm_list) {
     y$GeneName[id]<-colnames(list$model)[1]
-    y$`Repeats-family/families`[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncol(covariates))],collapse = " ")
+    y$RepeatName[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncol(covariates))],collapse = " ")
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
     n<-summary(list)$coefficients[,4]
-    y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " ")
+    y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " // ")
     id<-id+1
   }
-  write.table(y, file="results-lm.csv", quote=F, sep="\t", row.names=F, col.names=T)
+  write.table(y, file=paste(prefix,"-results-lm.tsv"), quote=F, sep="\t", row.names=F, col.names=T)
 }
 
 lmp <- function (modelobject) {
@@ -213,6 +214,6 @@ lmp <- function (modelobject) {
 }
 
 
-writingResultOfVoom<-function(v){
-  write.table(v,"results-of-voom.csv", quote=F, sep="\t",row.names = F,col.names = T)
+writingResultOfVoom<-function(v,prefix){
+  write.table(v, paste(prefix,"-results-of-voom.tsv"), quote=F, sep="\t",row.names = F,col.names = T)
 }
