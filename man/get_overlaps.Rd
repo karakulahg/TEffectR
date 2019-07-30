@@ -11,7 +11,7 @@
 \arguments{
   \item{g}{this is a data frame which contains gene annotatitons that out of get_intervals() function.}
   \item{r}{it is a data frame which contain formatted repeat annotations that out of rm_format() function.}
-  \item{strand}{it is a character string that can be "same" or "opposite". it defines strand's importance while overlapping}
+  \item{strand}{it is a character string that can be "same" or "strandness". it defines strand's importance while overlapping}
   \item{distance}{it is a integer that can be negative or positive. Negative digit refers to down stream; Positive digit refers to up stream.}
   \item{repeat_class}{it is a character string that have to being selecting one of the any repeat classes}
 }
