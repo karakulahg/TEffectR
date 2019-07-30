@@ -86,7 +86,11 @@ count_repeats<-function(bamlist,namelist,ranges){
   df<-as.data.frame(apply(df,2,function(x)gsub('\\s+', '',x))) # for removing whitespaces from fields.
   df$repeat_family <- sub("^$", ".", df$repeat_family)
   write.table(df, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
+  if(is.na(match('-',levels(strand(ranges))))==TRUE & is.na(match('+',levels(strand(ranges))))==TRUE){
+    system(paste("bedtools multicov -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
+  }else{
+    system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
+  }
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(df)),namelist)
   return(counts)
