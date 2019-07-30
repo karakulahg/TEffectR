@@ -23,7 +23,7 @@
 # #
 # # ## for gene annotation
 # #
-#    gene.annotation<-get_intervals(x = rownames(x.sb), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) #use organism parameter if you provide gene symbols
+#    gene.annotation<-get_intervals(x = rownames(x), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) #use organism parameter if you provide gene symbols
 # #
 # # ########################################################################################
 # #

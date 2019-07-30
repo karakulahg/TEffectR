@@ -47,17 +47,12 @@ get_overlaps <- function(g,r,strand,distance,repeat_class){
     }else if(distance<0){
       g<-getDownstreams(g,distance,FALSE)
     }
-    if(strand=="same"){
-      g<-makeGRangeObj(g)
-      r<-makeGRangeObj(r)
-      overlaps<-toFindOverlaps(r,g)
-      return(overlaps)
-    }else if(strand=="strandness"){
-      g<-makeGrObj_Unstrand(g)
-      r<-makeGrObj_Unstrand(r)
-      overlaps<-toFindOverlaps(r,g)
-      return(overlaps)
-    }
+
+    g<-makeGRangeObj(g)
+    r<-makeGRangeObj(r)
+    overlaps<-toFindOverlaps(r,g,strand)
+    return(overlaps)
+
   }else{
     print("not found input")
     return(NULL)}
@@ -74,7 +69,7 @@ rm_format <- function(filepath){
 }
 
 
-count_repeats<-function(bamlist,namelist,ranges){
+count_repeats<-function(bamlist,namelist,ranges,strand){
   bamfiles<-paste(bamlist, collapse = ' ')
   bamFile <- Rsamtools::BamFile(bamlist[1])
   if(stringr::str_detect(GenomeInfoDb::seqnames(GenomeInfoDb::seqinfo(bamFile)),"chr")==FALSE){
@@ -86,7 +81,7 @@ count_repeats<-function(bamlist,namelist,ranges){
   df<-as.data.frame(apply(df,2,function(x)gsub('\\s+', '',x))) # for removing whitespaces from fields.
   df$repeat_family <- sub("^$", ".", df$repeat_family)
   write.table(df, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  if(is.na(match('-',levels(strand(ranges))))==TRUE & is.na(match('+',levels(strand(ranges))))==TRUE){
+  if(strand=="strandness"){
     system(paste("bedtools multicov -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
   }else{
     system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
