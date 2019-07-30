@@ -202,7 +202,7 @@ writingResultOfLM<-function(lm_list,covariates,prefix){
     y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " // ")
     id<-id+1
   }
-  write.table(y, file=paste(prefix,"-results-lm.tsv"), quote=F, sep="\t", row.names=F, col.names=T)
+  write.table(y, file=paste(prefix,"-lm-results.tsv",collapse = ""), quote=F, sep="\t", row.names=F, col.names=T)
 }
 
 lmp <- function (modelobject) {
@@ -215,5 +215,5 @@ lmp <- function (modelobject) {
 
 
 writingResultOfVoom<-function(v,prefix){
-  write.table(v, paste(prefix,"-results-of-voom.tsv"), quote=F, sep="\t",row.names = F,col.names = T)
+  write.table(v, paste(prefix,"-cpm-values.tsv",collapse = ""), quote=F, sep="\t",row.names = F,col.names = T)
 }

@@ -117,3 +117,8 @@
 # lm.list<-apply_lm(gene.annotation = gene.annotation, gene.counts = x.sb[,1:10], repeat.counts = sum.repeat.counts, covariates = x)
 # lm.list<-apply_lm(gene.annotation = gene.annotation, gene.counts = x, repeat.counts = sum.repeat.counts, covariates = xc,"line")
 
+
+
+
+
+
