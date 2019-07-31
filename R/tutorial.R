@@ -114,11 +114,8 @@
 #    repeat.counts<-count_repeats(bamlist = bamlist, namelist, ranges= overlapped.results) #for counting
 #
 #   sum.repeat.counts<-summarise_repeat_counts(repeat.counts, namelist) #repeat.counts
-# lm.list<-apply_lm(gene.annotation = gene.annotation, gene.counts = x.sb[,1:10], repeat.counts = sum.repeat.counts, covariates = x)
+
+# xc <- data.frame("Age" = c(rep(13,22), rep(24,22)),"Sex" = c(rep("F",22),rep("M",22)))
+
 # lm.list<-apply_lm(gene.annotation = gene.annotation, gene.counts = x, repeat.counts = sum.repeat.counts, covariates = xc,"line")
-
-
-
-
-
 

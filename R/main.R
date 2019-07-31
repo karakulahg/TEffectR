@@ -196,11 +196,19 @@ writingResultOfLM<-function(lm_list,covariates,prefix){
     n<-summary(list)$coefficients[,4]
     y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " // ")
     id<-id+1
+    if(lmp(list)<0.01){
+      dir<-gsub(" ","", paste(getwd(),"/output/", colnames(list$model)[1],collapse=""))
+      dir.create(dir)
+      filedir<-gsub(" ","",paste(dir,"/lmfitOTONE%1d.png",collapse = ""))
+      png(filedir, width=720, height=720, pointsize=16)
+      plot(list)
+      dev.off()
+    }
   }
   write.table(y, file=paste(prefix,"-lm-results.tsv",collapse = ""), quote=F, sep="\t", row.names=F, col.names=T)
 }
 
-lmp <- function (modelobject) {
+lmp <- function (modelobject){
   if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
   f <- summary(modelobject)$fstatistic
   p <- pf(f[1],f[2],f[3],lower.tail=F)
