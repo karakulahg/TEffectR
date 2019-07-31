@@ -69,7 +69,7 @@ rm_format <- function(filepath){
 }
 
 
-count_repeats<-function(bamlist,namelist,ranges,strand){
+count_repeats<-function(bamlist,namelist,ranges){
   bamfiles<-paste(bamlist, collapse = ' ')
   bamFile <- Rsamtools::BamFile(bamlist[1])
   if(stringr::str_detect(GenomeInfoDb::seqnames(GenomeInfoDb::seqinfo(bamFile)),"chr")==FALSE){
@@ -81,11 +81,7 @@ count_repeats<-function(bamlist,namelist,ranges,strand){
   df<-as.data.frame(apply(df,2,function(x)gsub('\\s+', '',x))) # for removing whitespaces from fields.
   df$repeat_family <- sub("^$", ".", df$repeat_family)
   write.table(df, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  if(strand=="strandness"){
-    system(paste("bedtools multicov -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
-  }else{
-    system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
-  }
+  system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(df)),namelist)
   return(counts)
