@@ -136,3 +136,42 @@ TE.counts <- TEffectR::count_repeats(bamlist = BAM.list, SampleName.list, ranges
 SumOfTEs<-TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = SampleName.list)
 
 ```
+
+#Session Info
+
+```
+> sessionInfo()
+R version 3.5.1 (2018-07-02)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 16.04.4 LTS
+
+Matrix products: default
+BLAS: /usr/lib/libblas/libblas.so.3.6.0
+LAPACK: /usr/lib/lapack/liblapack.so.3.6.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=tr_TR.UTF-8        LC_COLLATE=en_US.UTF-8     LC_MONETARY=tr_TR.UTF-8   
+ [6] LC_MESSAGES=en_US.UTF-8    LC_PAPER=tr_TR.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=tr_TR.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats4    parallel  stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] bindrcpp_0.2.2       rlist_0.4.6.1        edgeR_3.24.3         limma_3.38.3         Rsamtools_1.34.0     Biostrings_2.50.2   
+ [7] XVector_0.22.0       GenomicRanges_1.34.0 GenomeInfoDb_1.18.1  IRanges_2.16.0       S4Vectors_0.20.1     BiocGenerics_0.28.0 
+[13] dplyr_0.7.8          biomartr_0.8.0       biomaRt_2.38.0       stringr_1.3.1        TEffectR_0.1.0      
+
+loaded via a namespace (and not attached):
+ [1] progress_1.2.0         tidyselect_0.2.5       locfit_1.5-9.1         purrr_0.3.0            lattice_0.20-35       
+ [6] yaml_2.2.0             blob_1.1.1             XML_3.98-1.16          rlang_0.3.1            pillar_1.3.1          
+[11] glue_1.3.0             DBI_1.0.0              BiocParallel_1.16.5    bit64_0.9-7            GenomeInfoDbData_1.2.0
+[16] bindr_0.1.1            zlibbioc_1.28.0        memoise_1.1.0          Biobase_2.42.0         curl_3.3              
+[21] AnnotationDbi_1.44.0   Rcpp_1.0.0             readr_1.3.1            bit_1.1-14             hms_0.4.2             
+[26] digest_0.6.18          stringi_1.2.4          grid_3.5.1             tools_3.5.1            bitops_1.0-6          
+[31] magrittr_1.5           RCurl_1.95-4.11        RSQLite_2.1.1          tibble_2.0.1           crayon_1.3.4          
+[36] pkgconfig_2.0.2        data.table_1.12.0      prettyunits_1.0.2      assertthat_0.2.0       httr_1.4.0            
+[41] rstudioapi_0.9.0       R6_2.3.0               compiler_3.5.1        
+
+
+```
