@@ -2,7 +2,7 @@
 \alias{summarise_repeat_counts}
 \title{To summarise counts of repeats as gene name and repeat family}
 \description{
-Takes the output of count_repeats() function as input. It is used to calculate the total number of sequencing reads derived from each TE that are located within the upstream of a certain gene.
+Takes the output of count_repeats() function as input. It is used to calculate the total number of sequencing reads derived from each TE that is located within the upstream of a certain gene.
 }
 \usage{
 summarise_repeat_counts(counts, namelist)
