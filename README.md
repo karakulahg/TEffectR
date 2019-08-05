@@ -37,7 +37,7 @@ library(TEffectR)
 
 ```
 
-2. Download the most recent RepeatMasker annotation file(http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html)
+2. Download the most recent RepeatMasker [annotation file](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html)
 
 3. Read the downloaded annotation file and parse it for the downstream analysis. In our case, we use hg38 assembly:
 ```
@@ -51,19 +51,19 @@ rm <- TEffectR::rm_format(filepath = "~/Downloads/hg38.fa.out.gz" )
 x<-read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
 
 ```
-5. Retrieve the genomic locations of all genes in the given gene read count matrix.
+5. Retrieve the genomic locations of all genes in the given read count matrix.
 
-    - The URL option which you use annotation release is a link. you can these from [this link](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html) or you can list by this R code:  
+    - The URL argument takes the version of Ensembl database used for gene expression quantification and can be listed [here](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html#using-archived-versions-of-ensembl). Alternatively, you can list using the following command:  
     
         ```
         biomaRt::listEnsemblArchives()    
         ```
     
-    - ID.type can be ensembl_gene_name, ensembl_transcript_id, ensembl_transcript_id_version, ensembl_gene_id_version, ensembl_gene_id.
+    - ID.type must be ensembl_gene_name, ensembl_gene_id, or ensembl_transcript_id.
     
-    - For this example :
+    - In our case, we use Ensembl gene IDs (e.g. ENSG00000000003, ENSG00000000005, ...):
     
         ```
-        genes <- get_intervals(x = rownames(x), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org" ) 
+        genes <- get_intervals(x = rownames(x), assembly="hg38", ID.type = "ensembl_gene_id", URL="http://dec2014.archive.ensembl.org" ) 
 
         ```
