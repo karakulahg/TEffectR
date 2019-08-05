@@ -137,7 +137,7 @@ SumOfTEs<-TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = Sampl
 
 ```
 
-#Session Info
+#### Session Info
 
 ```
 > sessionInfo()
