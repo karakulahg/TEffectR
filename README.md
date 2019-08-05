@@ -37,9 +37,9 @@ library(TEffectR)
 
 ```
 
-2. Download the most recent RepeatMasker [annotation file](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html)
+2. Download the most recent RepeatMasker [annotation file](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html) of the organism of interest.
 
-3. Read the downloaded annotation file and parse it for the downstream analysis. In our case, we use hg38 assembly:
+3. The following function takes RepeatMasker annotation file as input and extracts the genomic location of each TE along with repeat class and family information. The output of rm_format() function is used while searching TEs that are located in the upstream region of the genes of interest. In our case, we use hg38 assembly:
 ```
 
 repeatmasker.annotation <- TEffectR::rm_format(filepath = "~/Path2Directory/hg38.fa.out.gz" )
@@ -134,6 +134,20 @@ TE.counts <- TEffectR::count_repeats(bamlist = BAM.list, SampleName.list, ranges
 ```
 
 SumOfTEs<-TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = SampleName.list)
+
+```
+
+
+9. The following core function applies filtering, TMM normalization, voom transformation and LM to the given raw count expression values, respectively. It takes four arguments: (i) raw gene counts, (ii) raw TE counts, (iii) a data frame containing user-defined covariates (e.g. tissue type, disease state), and (iv) the output of get_overlaps() function. This function returns three outputs: (i) a tsv file containing the p-value of each model, significance level of covariates and associated adjusted R squared values, (ii) another tsv file containing log2(CPM) values of genes and TEs included in LM, and (iii) a group of diagnostic plots for each significant model (p < 0.05).
+
+```
+
+#Create a data frame containing user-defined covariates.
+df.covariates<-data.frame( tissue_type=c(rep("Normal", 22), rep("Tumor", 22)), patient=c(c(1:22), c(1:22)) )
+
+#Apply multiple linear regression models using the given list of covariates and TE counts.
+TEffectR::apply_lm(gene.annotation = gene.annotation, gene.counts = exprs, repeat.counts = SumOfTEs, covariates = df.covariates, prefix = "LTR-2kb")
+
 
 ```
 
