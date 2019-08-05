@@ -123,9 +123,9 @@ BAM.list <- c("~/Path2Directory/SRR5962198/SRR5962198_unique_sorted.bam",
              "~/Path2Directory/SRR5962240/SRR5962240_unique_sorted.bam",
              "~/Path2Directory/SRR5962241/SRR5962241_unique_sorted.bam")
              
-SampleName.list<-colnames(exprs)             
+SampleName.list <- colnames(exprs)             
 
-TE.counts <- TEffectR::count_repeats(bamlist = BAM.list, SampleName.list, ranges=overlaps)
+TE.counts <- TEffectR::count_repeats(bamlist = BAM.list, namelist = SampleName.list, ranges=overlaps)
 
 ```
 
@@ -133,7 +133,7 @@ TE.counts <- TEffectR::count_repeats(bamlist = BAM.list, SampleName.list, ranges
 
 ```
 
-SumOfTEs<-TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = SampleName.list)
+SumOfTEs <- TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = SampleName.list)
 
 ```
 
@@ -143,10 +143,10 @@ SumOfTEs<-TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = Sampl
 ```
 
 #Create a data frame containing user-defined covariates.
-df.covariates<-data.frame( tissue_type=c(rep("Normal", 22), rep("Tumor", 22)), patient=c(c(1:22), c(1:22)) )
+df.covariates <- data.frame( tissue_type=c(rep("Normal", 22), rep("Tumor", 22)), patient=c(c(1:22), c(1:22)) )
 
 #Apply multiple linear regression models using the given list of covariates and TE counts.
-TEffectR::apply_lm(gene.annotation = gene.annotation, gene.counts = exprs, repeat.counts = SumOfTEs, covariates = df.covariates, prefix = "LTR-2kb")
+results <- TEffectR::apply_lm(gene.annotation = gene.annotation, gene.counts = exprs, repeat.counts = SumOfTEs, covariates = df.covariates, prefix = "LTR-2kb")
 
 
 ```
