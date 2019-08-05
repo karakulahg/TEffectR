@@ -5,7 +5,7 @@
 This core function applies filtering, TMM normalization, voom transformation and LM to the given raw count expression values, respectively. It takes four arguments: (i) raw gene counts, (ii) raw TE counts, (iii) a data frame containing user-defined covariates (e.g. tissue type, disease state), and (iv) the output of get_overlaps() function. This function returns three outputs: (i) a tsv file containing the p-value of each model, significance level of covariates and associated adjusted R squared values, (ii) another tsv file containing log2(CPM) values of genes and TEs included in LM, and (iii) a group of diagnostic plots for each significant model (p < 0.05).
 }
 \usage{
-  apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, prefix)
+apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, prefix)
 }
 \arguments{
   \item{gene.annotation}{It is a data frame containing the output of get_intervals() function.}

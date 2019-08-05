@@ -8,7 +8,7 @@ This function takes RepeatMasker annotation file as input and extracts the genom
 rm_format(filepath)
 }
 \arguments{
-\item{filepath}{it is a character that refers directory of downloaded repeat file.}
+  \item{filepath}{it is a character that refers directory of downloaded repeat file.}
 
 }
 \seealso{
