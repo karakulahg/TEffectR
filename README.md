@@ -1,8 +1,7 @@
-# TEffectR
-This repo is a R package. It is developped by Nazmiye Arslan. 
-> Email : nzmye.arslan01@gmail.com 
-### What does this package use for ? 
-
+# TEffectR: An R package for predicting the effects of transposable elements on gene expression with linear regression model
+This repo is currently under review. Citation information will be provided as soon as our work is accepted. 
+### What does this package use for? 
+Transposable elements (TEs) are DNA sequences that are able to translocate themselves along a host genome (Biemont & Vieira 2006). This R (https://www.r-project.org) package, using linear regression model (LM), for dissecting significant associations between TEs and nearby genes in a given RNA-sequencing (RNA-seq) data set. Our R package, namely TEffectR, makes use of publicly available RepeatMasker TE (http://www.repeatmasker.org) and Ensembl gene annotations (https://www.ensembl.org/index.html) and calculate total unique read counts of TEs from sorted and indexed genome aligned BAM files. Then, it predicts the influence of TE expression on the transcription of adjacent genes under diverse biological conditions.
 
 #### What are the dependencies for TEffectR ?
 1. [R](https://www.r-project.org/) version should be version 3.5+
