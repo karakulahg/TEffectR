@@ -197,9 +197,9 @@ writingResultOfLM<-function(lm_list,covariates,prefix){
     y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " // ")
     id<-id+1
     if(lmp(list)<0.05){
-      dir<-gsub(" ","", paste(getwd(),"/",prefix,"-output/", colnames(list$model)[1],collapse=""))
+      dir<-paste0(getwd(),gsub(" ","", paste("/",prefix,"-output/", colnames(list$model)[1])),collapse="")
       dir.create(dir,recursive = T)
-      filedir<-gsub(" ","",paste(dir,"/lmfitOTONE%1d.png",collapse = ""))
+      filedir<-paste0(dir,"/lmfitOTONE%1d.png",collapse = "")
       png(filedir, width=720, height=720, pointsize=16)
       plot(list)
       dev.off()
