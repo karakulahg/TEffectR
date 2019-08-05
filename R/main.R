@@ -32,11 +32,11 @@ get_intervals <- function(x, assembly, ID.type, URL){
 }
 
 # the function is called as b is returned overlap positions between genes and repeats
-get_overlaps <- function(g,r,strand,distance,repeat_class){
+get_overlaps <- function(g,r,strand,distance,repeat_type){
   options(warn=-1)
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
-    if(!is.null(repeat_class)){
-      hit<-r$repeat_class==repeat_class
+    if(!is.null(repeat_type)){
+      hit<-r$repeat_type==repeat_type
       r<-r[hit,]
     }else{
       print("please choose one of the repeat options")
@@ -62,7 +62,7 @@ get_overlaps <- function(g,r,strand,distance,repeat_class){
 rm_format <- function(filepath){
   dt<-biomartr::read_rm(filepath)
   last<-as.data.frame(stringr::str_split_fixed(dt$matching_class, "/", 2))
-  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat_name"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
+  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat_name"=dt$repeat_id, "repeat_type"=last$V1, "repeat_family"=last$V2)
   dt$strand<-as.character(dt$strand)
   dt$strand <- replace(dt$strand, dt$strand=="C", "-")
   return(dt)
@@ -90,7 +90,7 @@ count_repeats<-function(bamlist,namelist,ranges){
 summarise_repeat_counts <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
-    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatName=counts$repeat_name), FUN=sum)
+    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_type ,repeatName=counts$repeat_name), FUN=sum)
     return(b)
   }
 }
