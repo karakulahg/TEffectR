@@ -45,7 +45,7 @@ library(TEffectR)
 repeatmasker.annotation <- TEffectR::rm_format(filepath = "~/Path2Directory/hg38.fa.out.gz" )
 
 ```
-4. Read raw gene counts. An example gene count matrix can be dowloaded from: URL
+4. Read raw gene counts. An example gene count matrix can be dowloaded from: [here](https://drive.google.com/file/d/1icVyoqIdXqZ1jiKBAYynbTbSEl4VrtrK/view?usp=sharing)
 ```
 
 exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
@@ -74,7 +74,7 @@ exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFac
 overlaps <- TEffectR::get_overlaps(g=gene.annotation, r=repeatmasker.annotation, strand = "same", distance = 2000, repeat_type = "LTR")
 
 ```
-7. Count uniquely mapped reads to the TEs that are located within 2kb upstream of the given gene list. This step returns a raw count matrix of the total number of reads originated from TE sequences. Only the reads exhibiting 100\% overlap with given TE regions are considered and the user needs to specify individual path of each BAM file as input. All BAM files used in this step can be dowloaded from: URL This step may take up to hourse depending on the number of BAM files.
+7. Count uniquely mapped reads to the TEs that are located within 2kb upstream of the given gene list. This step returns a raw count matrix of the total number of reads originated from TE sequences. Only the reads exhibiting 100\% overlap with given TE regions are considered and the user needs to specify individual path of each BAM file as input. All BAM files used in this step can be dowloaded from: [here](https://drive.google.com/file/d/1Hjac9OB07n001weLhKlYBC-GuEA5cYMv/view?usp=sharing) This step may take up to hourse depending on the number of BAM files.
     
 ```
 
