@@ -30,28 +30,28 @@ devtools::install_github("karakulahg/TEffectR")
 
 ### How does it work?
 
-1. Load the library :
+1. Load the library:
 ```
 
 library(TEffectR)
 
 ```
 
-2. For repeat annotation download [repeatmasker](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html)
+2. Download the most recent RepeatMasker annotation file(http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html)
 
-3. Read your repeat annotaion and format it. This example for hg38:
+3. Read the downloaded annotation file and parse it for the downstream analysis. In our case, we use hg38 assembly:
 ```
 
-rm <- rm_format(filepath = "~/Downloads/hg38.fa.out.gz" )
+rm <- TEffectR::rm_format(filepath = "~/Downloads/hg38.fa.out.gz" )
 
 ```
-4. To Read gene or transcript expression file :
+4. Read raw gene counts. An example gene count matrix can be dowloaded from: URL
 ```
 
 x<-read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
 
 ```
-5. For filter gene annotation from Biomart :
+5. Retrieve the genomic locations of all genes in the given gene read count matrix.
 
     - The URL option which you use annotation release is a link. you can these from [this link](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html) or you can list by this R code:  
     
