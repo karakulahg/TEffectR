@@ -8,13 +8,13 @@ This function takes RepeatMasker annotation file as input and extracts the genom
 rm_format(filepath)
 }
 \arguments{
-  \item{filepath}{it is a character that refers directory of downloaded repeat file.}
+\item{filepath}{it is a character that refers directory of downloaded repeat file.}
 
 }
 \seealso{
   \code{\link{}}.
 }\examples{
-#Read and parse the RepeatMasker annotation file of intesest
+#Read and parse the RepeatMasker annotation file of interest.
 TEffectR::rm_format(filepath="~/FilePath/hg38.fa.out.gz")
 }
 

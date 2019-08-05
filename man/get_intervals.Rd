@@ -8,7 +8,7 @@ This function is used to retrieve the genomic locations of all genes in a given 
 get_intervals(x, assembly, ID.type, URL)
 }
 \arguments{
-  \item{x}{a list of gene symbols, IDs or transcript IDs.}
+  \item{x}{a list of gene symbols, gene IDs or transcript IDs.}
   \item{assembly}{It is a character string that refers to the assembly of interest.}
   \item{ID.type}{It is a character string that refers to the ID type of interest. (ensembl_gene_name, ensemble_gene_id, ensemble_transcript_id).}
   \item{URL}{It is a character string that refers to the appropriate version of Ensembl database: http://www.ensembl.org/index.html.}
@@ -16,7 +16,7 @@ get_intervals(x, assembly, ID.type, URL)
 \seealso{
   \code{\link{}}.
 }\examples{
-#Retrieve genomic position of genes
+#Retrieve genomic position of genes.
 TEffectR::get_intervals(x = rownames(gene.counts), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org")
 }
 
