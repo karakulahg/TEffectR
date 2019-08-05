@@ -9,9 +9,9 @@ apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, prefix)
 }
 \arguments{
   \item{gene.annotation}{It is a data frame containing the output of get_intervals() function.}
-  \item{gene.counts}{It is a data frame containing of raw read counts of genes.}
+  \item{gene.counts}{It is a data frame containing the raw read counts of genes.}
   \item{repeat.counts}{It is a data frame containing the output of summarise_repeat_counts() function.}
-  \item{covariates}{It is a data frame containing user-defined covariates (e.g. tissue type, disease state).}
+  \item{covariates}{It is a data frame containing the user-defined covariates (e.g. tissue type, disease state).}
   \item{prefix}{It is a string given by the user. This prefix is added to output of apply_lm() function. }
 
 }
