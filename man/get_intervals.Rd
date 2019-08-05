@@ -1,24 +1,23 @@
 \name{get_intervals}
 \alias{get_intervals}
-\title{Getting gene intervals}
+\title{Retrieve the genomic locations of all genes in a given read count matrix.}
 \description{
-    Gene Annotations is filtered as a group of gene id or transcript id from Ensembl Genome Browser with using BiomaRt R package.
-  \code{save}.
+This function is used to retrieve the genomic locations of all genes in a given read count matrix by the user. Row names of the expression matrix must be one of the following: (i) official gene symbol, (ii) Ensembl gene or (iii) transcript ID. The output of this function is utilized while determining distance between genes and TEs.
 }
 \usage{
-get_intervals(x, organism, ID.type, URL)
+get_intervals(x, assembly, ID.type, URL)
 }
 \arguments{
-  \item{x}{a rownames vector of gene.counts or transcript.counts matrix that it includes gene ids or transcript ids.}
-  \item{organism}{it is a character string that defines assembly which working on.}
-  \item{ID.type}{it is a character string that defines id type for biomaRt using (ensemble_gene_id, ensemble_transcript_id).}
-  \item{URL}{the url is defined to interest on spesific ensemble archive version to filter gene interval (you can select the path from here : http://www.ensembl.org/index.html).}
+  \item{x}{a list of gene symbols, IDs or transcript IDs.}
+  \item{assembly}{It is a character string that refers to the assembly of interest.}
+  \item{ID.type}{It is a character string that refers to the ID type of interest. (ensembl_gene_name, ensemble_gene_id, ensemble_transcript_id).}
+  \item{URL}{It is a character string that refers to the appropriate version of Ensembl database: http://www.ensembl.org/index.html.}
 }
 \seealso{
   \code{\link{}}.
 }\examples{
-## getting gene intervals
-get_intervals(x = rownames(gene.counts), organism="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org")
+#Retrieve genomic position of genes
+TEffectR::get_intervals(x = rownames(gene.counts), assembly="hg38", ID.type = "ensembl_gene_id", URL="dec2014.archive.ensembl.org")
 }
 
 \keyword{file}
