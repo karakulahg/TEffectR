@@ -193,8 +193,10 @@ writingResultOfLM<-function(lm_list,covariates,prefix){
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
-    n<-list$coefficients
-    y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " // ")
+    n<-summary(list)$coefficients[,4]
+    na<-names(list$coefficients[-1])
+    naList<-paste(setdiff(na,names(n)),": NA")
+    y$`individual-p.vals`[id]<-paste(paste(names(n)[-1], n[-1], sep = " : ", collapse = " // "), paste(naList,collapse = " // "),sep = " // ")
     id<-id+1
     if(lmp(list)<0.05){
       dir<-paste0(getwd(),gsub(" ","", paste("/",prefix,"-output/", colnames(list$model)[1])),collapse="")
