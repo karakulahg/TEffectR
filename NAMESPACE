@@ -2,8 +2,7 @@ exportPattern("get_intervals")
 exportPattern("rm_format")
 exportPattern("get_overlaps")
 exportPattern("count_repeats")
-exportPattern("summarise_repeat_counts")
-exportPattern("merge_counts")
+exportPattern("summarize_repeat_counts")
 exportPattern("apply_lm")
 #' @import dplyr
 #' @import GenomicRanges

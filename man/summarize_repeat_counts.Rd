@@ -1,11 +1,11 @@
-\name{summarise_repeat_counts}
-\alias{summarise_repeat_counts}
-\title{To summarise counts of repeats as gene name and repeat family}
+\name{summarize_repeat_counts}
+\alias{summarize_repeat_counts}
+\title{To summarize counts of repeats as gene name and repeat family}
 \description{
 Takes the output of count_repeats() function as input. It is used to calculate the total number of sequencing reads derived from each TE that is located within the upstream of a certain gene.
 }
 \usage{
-summarise_repeat_counts(counts, namelist)
+summarize_repeat_counts(counts, namelist)
 }
 \arguments{
 \item{counts}{It is a data frame containing the output of count_repeats() function.}
@@ -15,8 +15,8 @@ summarise_repeat_counts(counts, namelist)
 \seealso{
   \code{\link{}}.
 }\examples{
-#Summarise repeat counts and calculate the total number of sequencing reads derived from each TE.
-TEffectR::summarise_repeat_counts(counts = repeats.counts, namelist = namelist)
+#Summarize repeat counts and calculate the total number of sequencing reads derived from each TE.
+TEffectR::summarize_repeat_counts(counts = repeats.counts, namelist = namelist)
 }
 
 \keyword{file}

@@ -87,7 +87,7 @@ count_repeats<-function(bamlist,namelist,ranges){
   return(counts)
 }
 
-summarise_repeat_counts <-function(counts,namelist){
+summarize_repeat_counts <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
     b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_type ,repeatName=counts$repeat_name), FUN=sum)
