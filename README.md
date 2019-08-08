@@ -133,7 +133,7 @@ TE.counts <- TEffectR::count_repeats(bamlist = BAM.list, namelist = SampleName.l
 
 ```
 
-SumOfTEs <- TEffectR::summarise_repeat_counts(counts = TE.counts, namelist = SampleName.list)
+SumOfTEs <- TEffectR::summarize_repeat_counts(counts = TE.counts, namelist = SampleName.list)
 
 ```
 
