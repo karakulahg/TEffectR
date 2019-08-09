@@ -39,13 +39,13 @@ library(TEffectR)
 
 2. Download the most recent RepeatMasker [annotation file](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html) for the organism of interest.
 
-3. The following function takes RepeatMasker annotation file as input and extracts the genomic location of each TE along with repeat class and family information. The output of rm_format() function is used while searching TEs overlapping in the up or downstream region of a given gene list. In our case, we use hg38 assembly:
+3. The following function takes RepeatMasker annotation file as input and extracts the genomic location of each TE along with the repeat class and family information. The output of rm_format() function is used while searching TEs overlapping in the upstream region of a given gene list. In our case, we use hg38 assembly:
 ```
 
 repeatmasker.annotation <- TEffectR::rm_format(filepath = "~/Path2Directory/hg38.fa.out.gz" )
 
 ```
-4. Read raw gene counts. An example gene count matrix can be dowloaded from: [here](https://drive.google.com/file/d/1icVyoqIdXqZ1jiKBAYynbTbSEl4VrtrK/view?usp=sharing). In this step, we make use of a publicly available whole transcriptome sequencing dataset including normal and tumor tissue specimens obtained from 22 ER+/HER2-breast cancer patients (GEO Accession ID: [GSE103001](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE103001)). This data set was analyzed with [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) - [StringTie](https://ccb.jhu.edu/software/stringtie/) pipeline. 
+4. Read raw gene counts. An example gene count matrix can be dowloaded from: [here](https://drive.google.com/file/d/1icVyoqIdXqZ1jiKBAYynbTbSEl4VrtrK/view?usp=sharing). In this step, we make use of a publicly available whole transcriptome sequencing dataset including normal and tumor tissue specimens obtained from 22 ER+/HER2-breast cancer patients (GEO Accession ID: [GSE103001](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE103001)). The count matrix was generated with [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) - [StringTie](https://ccb.jhu.edu/software/stringtie/) pipeline. 
 ```
 
 exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
