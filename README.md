@@ -1,7 +1,7 @@
 # TEffectR: An R package for predicting the effects of transposable elements on gene expression with linear regression model
 This repo is currently under review. Citation information will be provided as soon as our work is accepted. 
 ### What does this package use for? 
-Transposable elements (TEs) are DNA sequences that are able to translocate themselves along a host genome (Biemont & Vieira 2006). This R (https://www.r-project.org) package, using linear regression model (LM), for dissecting significant associations between TEs and nearby genes in a given RNA-sequencing (RNA-seq) data set. Our R package, namely TEffectR, makes use of publicly available RepeatMasker TE (http://www.repeatmasker.org) and Ensembl gene annotations (https://www.ensembl.org/index.html) and calculate total unique read counts of TEs from sorted and indexed genome aligned BAM files. Then, it predicts the influence of TE expression on the transcription of adjacent genes under diverse biological conditions.
+Transposable elements (TEs) are DNA sequences that are able to translocate themselves along a host genome (Biemont & Vieira 2006). This R (https://www.r-project.org) package, using linear regression model (LM), was developed for dissecting significant associations between TEs and nearby genes in a given RNA-sequencing (RNA-seq) data set. Our R package, namely TEffectR, makes use of publicly available RepeatMasker TE (http://www.repeatmasker.org) and Ensembl gene annotations (https://www.ensembl.org/index.html) and calculate total unique read counts of TEs from sorted and indexed genome aligned BAM files. Then, it predicts the potential influence of TE expression on the transcription of adjacent genes under diverse biological conditions.
 
 #### What are the dependencies for TEffectR ?
 1. [R](https://www.r-project.org/) version should be version 3.5+
@@ -37,15 +37,15 @@ library(TEffectR)
 
 ```
 
-2. Download the most recent RepeatMasker [annotation file](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html) of the organism of interest.
+2. Download the most recent RepeatMasker [annotation file](http://www.repeatmasker.org/genomicDatasets/RMGenomicDatasets.html) for the organism of interest.
 
-3. The following function takes RepeatMasker annotation file as input and extracts the genomic location of each TE along with repeat class and family information. The output of rm_format() function is used while searching TEs that are located in the upstream region of the genes of interest. In our case, we use hg38 assembly:
+3. The following function takes RepeatMasker annotation file as input and extracts the genomic location of each TE along with repeat class and family information. The output of rm_format() function is used while searching TEs overlapping in the up or downstream region of a given gene list. In our case, we use hg38 assembly:
 ```
 
 repeatmasker.annotation <- TEffectR::rm_format(filepath = "~/Path2Directory/hg38.fa.out.gz" )
 
 ```
-4. Read raw gene counts. An example gene count matrix can be dowloaded from: [here](https://drive.google.com/file/d/1icVyoqIdXqZ1jiKBAYynbTbSEl4VrtrK/view?usp=sharing)
+4. Read raw gene counts. An example gene count matrix can be dowloaded from: [here](https://drive.google.com/file/d/1icVyoqIdXqZ1jiKBAYynbTbSEl4VrtrK/view?usp=sharing). In this step, we make use of a publicly available whole transcriptome sequencing dataset including normal and tumor tissue specimens obtained from 22 ER+/HER2-breast cancer patients (GEO Accession ID: [GSE103001](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE103001)). This data set was analyzed with [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) - [StringTie](https://ccb.jhu.edu/software/stringtie/) pipeline. 
 ```
 
 exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFactors = F)
@@ -71,10 +71,10 @@ exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFac
 
 ```
 
-overlaps <- TEffectR::get_overlaps(g=gene.annotation, r=repeatmasker.annotation, strand = "same", distance = 2000, repeat_type = "LTR")
+overlaps <- TEffectR::get_overlaps(g=gene.annotation, r=repeatmasker.annotation, strand = "strandness", distance = 5000, repeat_type = "LTR")
 
 ```
-7. Count uniquely mapped reads to the TEs that are located within 2kb upstream of the given gene list. This step returns a raw count matrix of the total number of reads originated from TE sequences. Only the reads exhibiting 100\% overlap with given TE regions are considered and the user needs to specify individual path of each BAM file as input. All BAM files used in this step can be dowloaded from: [here](https://drive.google.com/file/d/1Hjac9OB07n001weLhKlYBC-GuEA5cYMv/view?usp=sharing) This step may take up to hourse depending on the number of BAM files.
+7. Count uniquely mapped reads to the TEs that are located within 5kb upstream of the given gene list. This step returns a raw count matrix of the total number of reads originated from TE sequences. Only the reads exhibiting 100\% overlap with given TE regions are considered and the user needs to specify individual path of each BAM file as input. All BAM files used in this step can be dowloaded from: [here](https://drive.google.com/file/d/1Hjac9OB07n001weLhKlYBC-GuEA5cYMv/view?usp=sharing) This step may take up to a few hours depending on the number of BAM files.
     
 ```
 
@@ -146,10 +146,12 @@ SumOfTEs <- TEffectR::summarize_repeat_counts(counts = TE.counts, namelist = Sam
 df.covariates <- data.frame( tissue_type=c(rep("Normal", 22), rep("Tumor", 22)), patient=c(c(1:22), c(1:22)) )
 
 #Apply multiple linear regression models using the given list of covariates and TE counts.
-results <- TEffectR::apply_lm(gene.annotation = gene.annotation, gene.counts = exprs, repeat.counts = SumOfTEs, covariates = df.covariates, prefix = "LTR-2kb")
+results <- TEffectR::apply_lm(gene.annotation = gene.annotation, gene.counts = exprs, repeat.counts = SumOfTEs, covariates = df.covariates, prefix = "LTR-5kb")
 
 
 ```
+
+10. The tab separated file containing the p-value of each model can be downloaded [here](https://drive.google.com/file/d/1bnrhcSQTDfL2GGnUjWrImyTRcxT0_RgP/view?usp=sharing) and Log2(CPM) values of genes and repeats are avaiable [here](https://drive.google.com/file/d/1bG_p5LagZsmohZjNWitgW0DmD97H3F6G/view?usp=sharing)
 
 #### Session Info
 
