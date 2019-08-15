@@ -1,14 +1,14 @@
 # TEffectR: An R package for predicting the effects of transposable elements on gene expression with linear regression model
 This repo is currently under review. Citation information will be provided as soon as our work is accepted. 
-### What does this package use for? 
-Transposable elements (TEs) are DNA sequences that are able to translocate themselves along a host genome (Biemont & Vieira 2006). This R (https://www.r-project.org) package, using linear regression model (LM), was developed for dissecting significant associations between TEs and nearby genes in a given RNA-sequencing (RNA-seq) data set. Our R package, namely TEffectR, makes use of publicly available RepeatMasker TE (http://www.repeatmasker.org) and Ensembl gene annotations (https://www.ensembl.org/index.html) and calculate total unique read counts of TEs from sorted and indexed genome aligned BAM files. Then, it predicts the potential influence of TE expression on the transcription of adjacent genes under diverse biological conditions.
+### What is this package used for? 
+Transposable elements (TEs) are DNA sequences that are able to translocate themselves along a host genome (Biemont & Vieira 2006). This R (https://www.r-project.org) package was developed for dissecting significant associations between TEs and nearby genes in a given RNA-sequencing (RNA-seq) data set by establishing a linear regression model (LM). Our R package, namely TEffectR, makes use of publicly available RepeatMasker TE (http://www.repeatmasker.org) and Ensembl gene annotations (https://www.ensembl.org/index.html) and calculate total unique read counts of TEs from sorted and indexed genome aligned BAM files. Then, it predicts the associations of TE expressions with the transcription of adjacent genes under diverse biological conditions. These associations could be made use of by biologists to understand potential influences of TE expression on the regulation of nearby genes.
 
 #### What are the dependencies for TEffectR ?
 1. [R](https://www.r-project.org/) version should be version 3.5+
-2. While using r programming we suggest you to use [Rstudio](https://www.rstudio.com/products/rstudio/download/) which is the R statistical computing environment to use and understand functions TEffectR well.
+2. While using r programming, we suggest you to use [Rstudio](https://www.rstudio.com/products/rstudio/download/) which is the R statistical computing environment to use and understand functions TEffectR well.
 3. [Bedtools](https://bedtools.readthedocs.io/en/latest/content/installation.html) is required on your local computer.
 4. [devtools](https://cran.r-project.org/web/packages/devtools/readme/README.html) is required to install TEffectR.
-5. TEffectR uses these R packages so you have to install all of them. How can you install them eaisly, please visit websites:
+5. TEffectR uses these R packages so you have to install all of them. You may visit the following websites to install them easily: 
     - [dplyr](https://dplyr.tidyverse.org/)
     - [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
     - [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html)
@@ -74,7 +74,7 @@ exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFac
 overlaps <- TEffectR::get_overlaps(g=gene.annotation, r=repeatmasker.annotation, strand = "strandness", distance = 5000, repeat_type = "LTR")
 
 ```
-7. Count uniquely mapped reads to the TEs that are located within 5kb upstream of the given gene list. This step returns a raw count matrix of the total number of reads originated from TE sequences. Only the reads exhibiting 100\% overlap with given TE regions are considered and the user needs to specify individual path of each BAM file as input. All BAM files used in this step can be dowloaded from: [here](https://drive.google.com/file/d/1Hjac9OB07n001weLhKlYBC-GuEA5cYMv/view?usp=sharing) This step may take up to a few hours depending on the number of BAM files.
+7. Count uniquely mapped reads to the TEs that are located within 5kb upstream of the given gene list. This step returns a raw count matrix of the total number of reads originated from TE sequences. Only the reads exhibiting 100\% overlap with given TE regions are considered and the user needs to specify individual paths for each BAM file as input. All BAM files used in this step can be downloaded from: [here](https://drive.google.com/file/d/1Hjac9OB07n001weLhKlYBC-GuEA5cYMv/view?usp=sharing) This step may take up to a few hours depending on the number of BAM files.
     
 ```
 
@@ -151,7 +151,7 @@ results <- TEffectR::apply_lm(gene.annotation = gene.annotation, gene.counts = e
 
 ```
 
-10. The tab separated file containing the p-value of each model can be downloaded [here](https://drive.google.com/file/d/1bnrhcSQTDfL2GGnUjWrImyTRcxT0_RgP/view?usp=sharing) and Log2(CPM) values of genes and repeats are avaiable [here](https://drive.google.com/file/d/1bG_p5LagZsmohZjNWitgW0DmD97H3F6G/view?usp=sharing)
+10. The tab separated file containing the p-value of each model can be downloaded [here](https://drive.google.com/file/d/1bnrhcSQTDfL2GGnUjWrImyTRcxT0_RgP/view?usp=sharing) and Log2(CPM) values of genes and repeats are available [here](https://drive.google.com/file/d/1bG_p5LagZsmohZjNWitgW0DmD97H3F6G/view?usp=sharing)
 
 #### Session Info
 
