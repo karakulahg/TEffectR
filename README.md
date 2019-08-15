@@ -67,7 +67,7 @@ exprs <- read.csv("gene_count_matrix.csv", row.names = 1, header=T, stringsAsFac
         gene.annotation <- get_intervals(x = rownames(exprs), assembly="hg38", ID.type = "ensembl_gene_id", URL="http://dec2014.archive.ensembl.org" ) 
 
         ```
-6. The following function takes the genomic intervals of genes and TEs as input. Besides, the user also requires to provide three additional parameters: (i) the maximum distance allowed between the start sites of genes and TEs, (ii) whether genes and TEs must be located in same strand and (iii) TE family or subfamily name (e.g. SINE, LINE). This function helps to detect TE species that are localized within the upstream of genes of interest.
+6. The following function takes the genomic intervals of genes and TEs as input. Besides, the user also requires to provide three additional parameters: (i) the maximum distance allowed between the start sites of genes and TEs, (ii) whether genes and TEs must be located in same strand and (iii) TE family or subfamily name (e.g. SINE, LINE). This function helps to detect TE species that are localized within the upstream (the "distance" argument takes positive values e.g. 5000) or downstream (the "distance" argument takes negative values e.g. -5000) of genes of interest. 
 
 ```
 
