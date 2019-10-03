@@ -137,10 +137,9 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates=NULL,
   writingResultOfVoom(voom_data,prefix)
 
   l<-list() # for last linear model list
-
+  ncov<-0
   unique.repeats<-unique(prepLMdata_repeats$geneName)
   for (r in 1:length(unique.repeats)) {
-    ncov<-0
     hit1<-prepLMdata_genes$geneName == as.character(unique.repeats[r])
     s1<-prepLMdata_genes[hit1,2:ncol(vall)]  # for gene counts
     hit2<-prepLMdata_repeats$geneName == as.character(unique.repeats[r])
@@ -177,21 +176,25 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates=NULL,
   }
 
 
-writingResultOfLM<-function(lm_list,covariates,prefix){
+writingResultOfLM<-function(lm_list,ncov,prefix){
   y<-data.frame()
   y<-as.data.frame(matrix(ncol=6,nrow=length(lm_list)))
   names(y) <- c("GeneName","RepeatName" , "r.squared" , "adjusted-r.squared" , "model-p.value", "individual-p.vals")
   id<-1
   for (list in lm_list) {
     y$GeneName[id]<-colnames(list$model)[1]
-    y$RepeatName[id]<-paste(colnames(list$model)[2:(ncol(list$model)-covariates)],collapse = " ")
+    y$RepeatName[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncov)],collapse = " ")
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
     n<-summary(list)$coefficients[,4]
     na<-names(list$coefficients[-1])
-    naList<-paste(setdiff(na,names(n)),": NA")
-    y$`individual-p.vals`[id]<-paste(paste(names(n)[-1], n[-1], sep = " : ", collapse = " // "), paste(naList,collapse = " // "),sep = " // ")
+    if(is.logical(setdiff(na,names(n)))==0){
+      y$`individual-p.vals`[id]<-paste(paste(names(n)[-1], n[-1], sep = " : ", collapse = " // "))
+    }else{
+      naList<-paste(setdiff(na,names(n)),": NA")
+      y$`individual-p.vals`[id]<-paste(paste(names(n)[-1], n[-1], sep = " : ", collapse = " // "), paste(naList,collapse = " // "),sep = " // ")
+    }
     id<-id+1
     if(lmp(list)<0.05){
       dir<-paste0(getwd(),gsub(" ","", paste("/",prefix,"-output/", colnames(list$model)[1])),collapse="")
