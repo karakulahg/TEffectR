@@ -105,7 +105,7 @@ summarise_repeat_counts <-function(counts,namelist){
 }
 
 
-apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates, prefix){
+apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates=NULL, prefix){
 
   # to merge counts
   df1<-gene.annotation[,5:6]
@@ -138,57 +138,52 @@ apply_lm<-function(gene.annotation, gene.counts, repeat.counts, covariates, pref
   prepLMdata_repeats<-temp
   prepLMdata_repeats[,4:ncol(prepLMdata_repeats)]<-new_voom[col_indexes,2:ncol(new_voom)]
 
-  v_ids_for_genes <- match(temp$geneName,new_voom$geneName)#to get row ids of genes which are passed from voom translation and associated with repeats
+  v_ids_for_genes <- match(temp$geneName,new_voom$geneName) #to get row ids of genes which are passed from voom translation and associated with repeats
   prepLMdata_genes<-na.omit(new_voom[v_ids_for_genes,])
   prepLMdata_genes<-unique(prepLMdata_genes)
 
   voom_data<-cbind(vall$geneName,v$E)
   writingResultOfVoom(voom_data,prefix)
 
-  l<-list()
-  # gene.counts<-count.matrix[row.names(v$E),]
-  # s3<-group
-  if(nrow(covariates)==(ncol(count.matrix)-1)){
-    unique.repeats<-unique(prepLMdata_repeats$geneName)
-    for (r in 1:length(unique.repeats)) {
-      # print(r)
-      hit1<-prepLMdata_genes$geneName == as.character(unique.repeats[r])
-      s1<-prepLMdata_genes[hit1,2:ncol(vall)]  # for gene counts
-      hit2<-prepLMdata_repeats$geneName == as.character(unique.repeats[r])
-      s2<-prepLMdata_repeats[hit2,] # for repeat counts
-      if(nrow(s1)==1 & nrow(s2)>0){
-        goalsMenu <- as.character(s2$repeatName)
-        output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
-        names(output) <- c(unique(as.character(s2$geneName)), as.vector(s2$repeatName))
-        output[1:length(s1),1]<-as.numeric(s1)
-        for (var in 1:(ncol(output)-1)){
-          output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
-        }
-        # output[1:length(s3),ncol(output)]<-as.character(s3)
-        output<-cbind(output,covariates)
-        colnames(output)[1]<-gsub("-","_",colnames(output)[1])
-        if(r>1){
-          formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
-          lm.out<-lm(formula = formula , data=output)
-          l<-list.append(l,lm.out)
-          # l<-list.append(l,output)
-        }else if (r==1){
-          formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
-          lm.out<-lm(formula = formula , data=output)
-          l<-list.append(list(lm.out))
-          # l<-list.append(list(output))
+  l<-list() # for last linear model list
+
+  unique.repeats<-unique(prepLMdata_repeats$geneName)
+  for (r in 1:length(unique.repeats)) {
+    ncov<-0
+    hit1<-prepLMdata_genes$geneName == as.character(unique.repeats[r])
+    s1<-prepLMdata_genes[hit1,2:ncol(vall)]  # for gene counts
+    hit2<-prepLMdata_repeats$geneName == as.character(unique.repeats[r])
+    s2<-prepLMdata_repeats[hit2,] # for repeat counts
+    if(nrow(s1)==1 & nrow(s2)>0){
+      goalsMenu <- as.character(s2$repeatName)
+      output <- as.data.frame(matrix(rep(0, 1 + length(goalsMenu)), nrow=1))
+      names(output) <- c(unique(as.character(s2$geneName)), as.vector(s2$repeatName))
+      output[1:length(s1),1]<-as.numeric(s1)
+      for (var in 1:(ncol(output)-1)){
+        output[1:length(s2[var,4:ncol(s2)]),var+1]<- as.numeric(s2[var,4:ncol(s2)])
+      }
+      if(!is.null(covariates)){
+        ncov<-ncol(covariates)
+        if(nrow(covariates)==(ncol(count.matrix)-1)){
+          output<-cbind(output,covariates)
         }
       }
-
+      colnames(output)[1]<-gsub("-","_",colnames(output)[1])
+      if(r>1){
+        formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
+        lm.out<-lm(formula = formula , data=output)
+        l<-list.append(l,lm.out)
+      }else if (r==1){
+        formula <- paste(as.character(colnames(output)[1]),"~.",sep = "")
+        lm.out<-lm(formula = formula , data=output)
+        l<-list.append(list(lm.out))
+      }
     }
-    writingResultOfLM(l,covariates,prefix)
-    return(l)
-  }else{
-    print("number of group does not match with sample number of gene count matrix please check it ! ")
-    return(NULL)
-  }
 
-}
+  }
+  writingResultOfLM(l,ncov,prefix)
+  return(l)
+  }
 
 
 writingResultOfLM<-function(lm_list,covariates,prefix){
@@ -198,7 +193,7 @@ writingResultOfLM<-function(lm_list,covariates,prefix){
   id<-1
   for (list in lm_list) {
     y$GeneName[id]<-colnames(list$model)[1]
-    y$RepeatName[id]<-paste(colnames(list$model)[2:(ncol(list$model)-ncol(covariates))],collapse = " ")
+    y$RepeatName[id]<-paste(colnames(list$model)[2:(ncol(list$model)-covariates)],collapse = " ")
     y$r.squared[id]<-summary(list)$r.squared
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
