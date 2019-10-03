@@ -65,18 +65,30 @@ makeGrObj_Unstrand <- function(df){  #within strandness
   return(gr)
 }
 
-
-toFindOverlaps<-function(gr_repeats,gr_genome){  #to get overlap in general function
+toFindOverlaps<-function(gr_repeats,gr_genome,strand){  #to get overlap in general function
   # Find overlaps
   names(values(gr_genome))[3:4]<-c("gStart","gEnd")
   names(values(gr_repeats))[4:5]<-c("rStart","rEnd")
-  m <- GenomicRanges::findOverlaps(gr_genome, gr_repeats)
-  gr_genome.matched <- gr_genome[queryHits(m)]
+  if(strand=="same"){
+    m <- GenomicRanges::findOverlaps(gr_genome, gr_repeats)
+    gr_genome.matched <- gr_genome[queryHits(m)]
+    # Add the metadata from gr2
+    mcols(gr_genome.matched) <- cbind.data.frame(
+      mcols(gr_genome.matched),
+      mcols(gr_repeats[subjectHits(m)]))
 
-  # Add the metadata from gr2
-  mcols(gr_genome.matched) <- cbind.data.frame(
-    mcols(gr_genome.matched),
-    mcols(gr_repeats[subjectHits(m)]))
+    return(gr_genome.matched)
+  }else if (strand=="strandness"){
+    m <- GenomicRanges::findOverlaps(gr_genome, gr_repeats,ignore.strand=TRUE)
+    gr_genome.matched <- gr_genome[queryHits(m)]
+    # Add the metadata from gr2
+    mcols(gr_genome.matched) <- cbind.data.frame(
+      mcols(gr_genome.matched),
+      mcols(gr_repeats[subjectHits(m)]))
 
-  return(gr_genome.matched)
+    return(gr_genome.matched)
+  }
+
+
 }
+

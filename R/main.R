@@ -32,11 +32,11 @@ get_intervals <- function(x, assembly, ID.type, URL){
 }
 
 # the function is called as b is returned overlap positions between genes and repeats
-get_overlaps <- function(g,r,strand,distance,repeat_class){
+get_overlaps <- function(g,r,strand,distance,repeat_type){
   options(warn=-1)
   if(is.data.frame(g) & is.data.frame(r) & is.numeric(distance)){
-    if(!is.null(repeat_class)){
-      hit<-r$repeat_class==repeat_class
+    if(!is.null(repeat_type)){
+      hit<-r$repeat_type==repeat_type
       r<-r[hit,]
     }else{
       print("please choose one of the repeat options")
@@ -47,17 +47,12 @@ get_overlaps <- function(g,r,strand,distance,repeat_class){
     }else if(distance<0){
       g<-getDownstreams(g,distance,FALSE)
     }
-    if(strand=="same"){
-      g<-makeGRangeObj(g)
-      r<-makeGRangeObj(r)
-      overlaps<-toFindOverlaps(r,g)
-      return(overlaps)
-    }else if(strand=="strandness"){
-      g<-makeGrObj_Unstrand(g)
-      r<-makeGrObj_Unstrand(r)
-      overlaps<-toFindOverlaps(r,g)
-      return(overlaps)
-    }
+
+    g<-makeGRangeObj(g)
+    r<-makeGRangeObj(r)
+    overlaps<-toFindOverlaps(r,g,strand)
+    return(overlaps)
+
   }else{
     print("not found input")
     return(NULL)}
@@ -67,7 +62,7 @@ get_overlaps <- function(g,r,strand,distance,repeat_class){
 rm_format <- function(filepath){
   dt<-biomartr::read_rm(filepath)
   last<-as.data.frame(stringr::str_split_fixed(dt$matching_class, "/", 2))
-  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat_name"=dt$repeat_id, "repeat_class"=last$V1, "repeat_family"=last$V2)
+  dt<-data.frame("chr"=dt$qry_id, "start"=dt$qry_start, "end"=dt$qry_end, "strand"=dt$matching_repeat, "repeat_name"=dt$repeat_id, "repeat_type"=last$V1, "repeat_family"=last$V2)
   dt$strand<-as.character(dt$strand)
   dt$strand <- replace(dt$strand, dt$strand=="C", "-")
   return(dt)
@@ -86,20 +81,16 @@ count_repeats<-function(bamlist,namelist,ranges){
   df<-as.data.frame(apply(df,2,function(x)gsub('\\s+', '',x))) # for removing whitespaces from fields.
   df$repeat_family <- sub("^$", ".", df$repeat_family)
   write.table(df, file="overlapped.bed", quote=F, sep="\t", row.names=F, col.names=F)
-  if(is.na(match('-',levels(strand(ranges))))==TRUE & is.na(match('+',levels(strand(ranges))))==TRUE){
-    system(paste("bedtools multicov -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
-  }else{
-    system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
-  }
+  system(paste("bedtools multicov -s -f 1 -D -bams ", paste(bamfiles), " -bed", " overlapped.bed > counts.txt"))
   counts<-read.csv("counts.txt",sep = "\t", header = F)
   colnames(counts)<-c(colnames(as.data.frame(df)),namelist)
   return(counts)
 }
 
-summarise_repeat_counts <-function(counts,namelist){
+summarize_repeat_counts <-function(counts,namelist){
   if(!is.null(counts) & !is.null(namelist)){
     col_indexes <- which(colnames(counts) %in% namelist)
-    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_class ,repeatName=counts$repeat_name), FUN=sum)
+    b<-aggregate(list(counts[,col_indexes]), by=list(geneName=counts$geneName, repeatClass=counts$repeat_type ,repeatName=counts$repeat_name), FUN=sum)
     return(b)
   }
 }
@@ -198,13 +189,23 @@ writingResultOfLM<-function(lm_list,covariates,prefix){
     y$`adjusted-r.squared`[id]<-summary(list)$adj.r.squared
     y$`model-p.value`[id]<-lmp(list)
     n<-summary(list)$coefficients[,4]
-    y$`individual-p.vals`[id]<-paste(names(n)[-1], n[-1], sep = " : ", collapse = " // ")
+    na<-names(list$coefficients[-1])
+    naList<-paste(setdiff(na,names(n)),": NA")
+    y$`individual-p.vals`[id]<-paste(paste(names(n)[-1], n[-1], sep = " : ", collapse = " // "), paste(naList,collapse = " // "),sep = " // ")
     id<-id+1
+    if(lmp(list)<0.05){
+      dir<-paste0(getwd(),gsub(" ","", paste("/",prefix,"-output/", colnames(list$model)[1])),collapse="")
+      dir.create(dir,recursive = T)
+      filedir<-paste0(dir,"/lmfitOTONE%1d.png",collapse = "")
+      png(filedir, width=720, height=720, pointsize=16)
+      plot(list)
+      dev.off()
+    }
   }
   write.table(y, file=paste(prefix,"-lm-results.tsv",collapse = ""), quote=F, sep="\t", row.names=F, col.names=T)
 }
 
-lmp <- function (modelobject) {
+lmp <- function (modelobject){
   if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
   f <- summary(modelobject)$fstatistic
   p <- pf(f[1],f[2],f[3],lower.tail=F)

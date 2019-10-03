@@ -1,25 +1,24 @@
 \name{get_overlaps}
 \alias{get_overlaps}
-\title{Finding overlapping intervals}
+\title{Find overlapping intervals.}
 \description{
-  Finds overlaps ranges between Gene alignments and intervals of Repeats.
-  \code{save}.
+Takes the genomic intervals of genes and TEs as input. Besides, the user also requires to provide three additional parameters: (i) the maximum distance allowed between the start sites of genes and TEs, (ii) whether genes and TEs must be located in same strand and (iii) TE family or subfamily name (e.g. SINE, LINE). This function helps to detect TEs that are localized within the upstream of genes of interest.
 }
 \usage{
-  get_overlaps(g,r,strand,distance,repeat_class)
+get_overlaps(g, r, strand, distance, repeat_type)
 }
 \arguments{
-  \item{g}{this is a data frame which contains gene annotatitons that out of get_intervals() function.}
-  \item{r}{it is a data frame which contain formatted repeat annotations that out of rm_format() function.}
-  \item{strand}{it is a character string that can be "same" or "strandness". it defines strand's importance while overlapping}
-  \item{distance}{it is a integer that can be negative or positive. Negative digit refers to down stream; Positive digit refers to up stream.}
-  \item{repeat_class}{it is a character string that have to being selecting one of the any repeat classes}
+  \item{g}{It is a data frame containing gene annotations retrieved via get_intervals() function.}
+  \item{r}{It is a data frame containing reformatted repeat annotations created via rm_format() function.}
+  \item{strand}{This argument takes one of the two values: either "same" or "strandness". In case "same" option is used, gene and TE must be in same strand.}
+  \item{distance}{It is a integer value that can be negative or positive. This argument is used for determining the maximum distance allowed between the start sites of genes and TEs.}
+  \item{repeat_type}{This argument takes a character string and it is used to filter a specific repeat type for the downstream analysis.}
 }
 \seealso{
   \code{\link{}}.
 }\examples{
-  ## getting overlapped intervals between given gene intervals and repeat intervals
-  get_overlaps(g = genes, r = rm, strand = "same", distance = 10000, repeat_class = "LINE")
+#Find TEs that are located within the upstream of the given gene list.
+TEffectR::get_overlaps(g = genes, r = rm, strand = "same", distance = 1000, repeat_type = "LINE")
 }
 
 \keyword{file}
