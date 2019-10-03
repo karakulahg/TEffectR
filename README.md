@@ -223,24 +223,9 @@ ENSG00000261606          0          0          0          0          0          
 
 
 
-> covariates :
+covariates <- data.frame("TissueType" = c(rep("N",5), rep("T",6)) )
 
-   Age Sex
-1   13   F
-2   13   F
-3   13   F
-4   13   F
-5   13   F
-6   13   F
-7   13   F
-8   13   F
-9   13   F
-10  13   F
-11  13   F
-
-
-
->prefix<-"ABC"
+prefix<-"Test"
 
 TEffectR::apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, prefix)
 
