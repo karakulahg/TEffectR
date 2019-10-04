@@ -168,7 +168,6 @@ chr6	136256863	136289851	-	ENSG00000029363	BCLAF1
 ...
 
 
-
 gene.counts :
 
 	Sample1	Sample2	Sample3	Sample4	Sample5	Sample6	Sample7	Sample8	Sample9	Sample10	Sample11
@@ -186,10 +185,12 @@ HS3ST1	LINE	CR1-3_Croc	24	54	12	35	89	103	24	67	12	47	12
 BCLAF1	LINE	HAL1	68	35	23	0	88	49	57	39	25	43	38
 ....
 
+
 covariates <- data.frame("TissueType" = c(rep("N",5), rep("T",6)) ) 
 
 OR
 
+#In case the TE expression is only single predictor
 covariates <- NULL
 
 prefix<-"SampleRun"
