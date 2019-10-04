@@ -198,6 +198,8 @@ TEffectR::apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, pref
 
 ```
 
+Sample files can also be downloaded here: [gene.annotation],  [gene.counts], and [repeat.counts].
+
 #### Session Info
 
 ```
