@@ -138,7 +138,9 @@ SumOfTEs <- TEffectR::summarize_repeat_counts(counts = TE.counts, namelist = Sam
 ```
 
 
-9. The following core function applies filtering, TMM normalization, voom transformation and LM to the given raw count expression values, respectively. It takes four arguments: (i) raw gene counts, (ii) raw TE counts, (iii) a data frame containing user-defined covariates (e.g. tissue type, disease state), and (iv) the output of get_overlaps() function. This function returns three outputs: (i) a tsv file containing the p-value of each model, significance level of covariates and associated adjusted R squared values, (ii) another tsv file containing log2(CPM) values of genes and TEs included in LM, and (iii) a group of diagnostic plots for each significant model (p < 0.05).
+9. The following core function applies filtering, TMM normalization, voom transformation and LM to the given raw count expression values, respectively. It takes four arguments: (i) raw gene counts, (ii) raw TE counts, (iii) a data frame containing user-defined covariates (e.g. tissue type, disease state), and (iv) the output of get_overlaps() function. When covariates are determined, one may include all the biological factors to see if they could explain the expression of the gene in conjuction with TE expression. However, one may as well only use the TE expression as the single predictor without the inclusion of further covariates. In this case, the covariates parameter takes NULL value.
+
+This function returns three outputs: (i) a tsv file containing the p-value of each model, significance level of covariates and associated adjusted R squared values, (ii) another tsv file containing log2(CPM) values of genes and TEs included in LM, and (iii) a group of diagnostic plots for each significant model (p < 0.05).
 
 ```
 
