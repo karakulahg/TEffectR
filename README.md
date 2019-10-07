@@ -199,7 +199,7 @@ TEffectR::apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, pref
 
 ```
 
-Sample files can also be downloaded here: [gene.annotation](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.annotation.csv),  [gene.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.counts.csv), and [repeat.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/sum.repeat.counts.csv).
+Sample files can also be downloaded here: [gene.annotation](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.annotation.tsv),  [gene.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.counts.tsv), and [repeat.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/sum.repeat.counts.tsv).
 
 #### Session Info
 
