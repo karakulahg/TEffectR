@@ -212,6 +212,7 @@ gene.counts<-read.table("gene.counts.tsv", header= T, row.names=1, stringsAsFact
 # read your summarised repeat annotation file
 sum.repeat.counts<-read.table("sum.repeat.counts.tsv", header= T, stringsAsFactors = F)
 
+#Include covariates
 covariates <- data.frame("TissueType" = c(rep("N",5), rep("T",6)) ) 
 
 OR
