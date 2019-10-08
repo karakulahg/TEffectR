@@ -185,6 +185,32 @@ HS3ST1	LINE	CR1-3_Croc	24	54	12	35	89	103	24	67	12	47	12
 BCLAF1	LINE	HAL1	68	35	23	0	88	49	57	39	25	43	38
 ....
 
+```
+
+
+
+Sample files can also be downloaded here: [gene.annotation](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.annotation.tsv),  [gene.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.counts.tsv), and [repeat.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/sum.repeat.counts.tsv) and the following pipeline can be run with these files:
+
+```
+
+library(stringr)
+library(biomaRt)
+library(biomartr)
+library(dplyr)
+library(Rsamtools)
+library(edgeR)
+library(rlist)
+library(limma)
+library(TEffectR)
+
+# read your gene annotation file
+gene.annot<-read.table("gene.annotation.tsv", header= T, stringsAsFactors = F)
+
+# read your gene expression file
+gene.counts<-read.table("gene.counts.tsv", header= T, row.names=1, stringsAsFactors = F)
+
+# read your summarised repeat annotation file
+sum.repeat.counts<-read.table("sum.repeat.counts.tsv", header= T, stringsAsFactors = F)
 
 covariates <- data.frame("TissueType" = c(rep("N",5), rep("T",6)) ) 
 
@@ -195,11 +221,14 @@ covariates <- NULL
 
 prefix<-"SampleRun"
 
-TEffectR::apply_lm(gene.annotation, gene.counts, repeat.counts, covariates, prefix)
+# apply linear modeling function of TEffectR
+lm<-TEffectR::apply_lm(gene.annotation = gene.annot,
+                       gene.counts = gene.counts,
+                       repeat.counts = sum.repeat.counts,
+                       covariates = covariates,
+                       prefix = prefix)
 
 ```
-
-Sample files can also be downloaded here: [gene.annotation](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.annotation.tsv),  [gene.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/gene.counts.tsv), and [repeat.counts](https://github.com/karakulahg/TEffectR/blob/master/sampleInputs/sum.repeat.counts.tsv).
 
 #### Session Info
 
