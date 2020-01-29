@@ -196,7 +196,7 @@ writingResultOfLM<-function(lm_list,ncov,prefix){
       y$`individual-p.vals`[id]<-paste(paste(names(n)[-1], n[-1], sep = " : ", collapse = " // "), paste(naList,collapse = " // "),sep = " // ")
     }
     id<-id+1
-    if(lmp(list)<0.05){
+    if(lmp(list) < 0.05 & !is.na(lmp(list))){
       dir<-paste0(getwd(),gsub(" ","", paste("/",prefix,"-output/", colnames(list$model)[1])),collapse="")
       dir.create(dir,recursive = T)
       filedir<-paste0(dir,"/lmfitOTONE%1d.png",collapse = "")
